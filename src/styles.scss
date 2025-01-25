@@ -1,0 +1,123 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  backface-visibility: hidden;
+}
+
+body {
+  margin: 0;
+  font-family: Nunito, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: auto;
+  overflow: hidden;
+  height: 100%;
+  position: relative;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  monospace;
+}
+
+.reverse-section {
+  flex-direction: row-reverse;
+}
+
+.justify-top-container {
+  justify-content: flex-start;
+}
+
+.section-sub-heading {
+  font-size: 2rem;
+  font-weight: 500;
+  padding: 20px;
+}
+
+.section-text {
+  text-align: left;
+  font-size: 1.4rem;
+  padding: 20px;
+  font-weight: 600;
+}
+
+.fade-enter {
+  opacity: 0;
+  z-index: 1;
+}
+
+.fade-enter.fade-enter-active {
+  opacity: 1;
+  transition: opacity 0.25s ease-in;
+}
+
+// Laptop: 769 min - 1024 max
+// Make container smaller
+@media all and (max-width: 1024px) {
+
+
+  .section-sub-heading {
+    font-size: 1.7rem;
+  }
+
+  .section-text {
+    font-size: 1.3rem;
+  }
+}
+
+// Tablet: 481 min - 1023 max
+// Go to column mode
+@media all and (max-width: 768px) {
+
+  .section-sub-heading {
+    font-size: 1.6rem;
+  }
+
+  .section-text {
+    font-size: 1.2rem;
+  }
+}
+
+// Mobile: 320 min - 480 max
+// Make container even smaller
+@media all and (max-width: 480px) {
+
+  .section-sub-heading {
+    font-size: 1.2rem;
+  }
+
+  .section-text {
+    font-size: 1.1rem;
+  }
+}
+
+
+@media all and (max-width: 768px) {
+  .nav-items {
+    flex-direction: column;
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: #FFF;
+    width: 0;
+    z-index: -1;
+    height: 100vh;
+    overflow: hidden;
+    padding: 140px 0;
+    transition: all 0.5s ease-in-out;
+  }
+
+  .nav-items.active {
+    width: 100%;
+  }
+}
+

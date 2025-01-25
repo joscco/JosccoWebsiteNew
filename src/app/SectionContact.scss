@@ -1,0 +1,55 @@
+@import "styles/Global";
+
+.letter-icon {
+  height: 40px;
+  margin: 0 10px;
+}
+
+.heading-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  align-items: center;
+
+  .contact-photo {
+    img {
+      width: 200px;
+      border-radius: 50%;
+      margin: 30px;
+    }
+  }
+
+  .contact-heading {
+    border-style: dashed;
+    border-width: 5px;
+    border-color: $red;
+  }
+
+  .contact-subheading {
+    width: 100%;
+    flex-basis: auto;
+    font-size: 1.5rem;
+  }
+
+  .contact-link {
+    font-size: 1.7rem;
+    color: $yellow;
+    font-weight: bold;
+  }
+
+  .contact-link:hover {
+    color: $beige;
+  }
+}
+
+// All Code for less than 768px width
+@media all and (max-width: 768px) {
+
+  #contact-section {
+    .heading-container {
+      margin-bottom: 0;
+      width: 90%;
+    }
+  }
+}

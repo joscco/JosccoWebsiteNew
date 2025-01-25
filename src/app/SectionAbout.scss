@@ -1,0 +1,12 @@
+@import "styles/Global";
+
+.about-text {
+  z-index: 6;
+}
+
+.about-heading {
+  z-index: 6;
+  border-style: dashed;
+  border-width: 5px;
+  border-color: $beige;
+}

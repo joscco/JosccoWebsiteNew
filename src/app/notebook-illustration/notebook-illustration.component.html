@@ -1,0 +1,10 @@
+<div class="notebook-illustration w-[320px] sm:w-[450px] md:w-[350px] lg:w-[490px] h-[320px] sm:h-[450px] md:h-[350px] lg:h-[490px]">
+  <img class="about-img notebook-image" src="images/AboutSection/notebook.png" alt="Notebook" />
+  <img class="about-img notebook-background" src="images/AboutSection/backgroundNotebook.png" alt="Back1" />
+  <img class="about-img code-background" src="images/AboutSection/codeBackground.png" alt="Back2" />
+  <img class="about-img smoke-1-image" src="images/AboutSection/smoke1.png" [style.top.%]="2 + 2 * Math.sin(seconds)" alt="Smoke" />
+  <img class="about-img smoke-2-image" src="images/AboutSection/smoke2.png" [style.top.%]="4 + 2 * Math.cos(seconds)" alt="More Smoke" />
+  <img class="about-img cup-image" src="images/AboutSection/cup.png" alt="A cup" />
+  <img class="about-img pen-image" src="images/AboutSection/pen.png" [style.right.%]="-2 * Math.sin(seconds) * Math.sin(seconds / 2)" [style.top.%]="45 + 0.5 * Math.sin(seconds) * Math.sin(seconds / 2)" alt="A pen" />
+  <img class="about-img code-image" src="images/AboutSection/code.png" [style.left.%]="-3 + 1.4 * Math.sin(seconds)" [style.top.%]="-15 + 10 * Math.sin(seconds)" alt="Code lines" />
+</div>
