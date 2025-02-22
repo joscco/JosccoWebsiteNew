@@ -1,22 +1,25 @@
-import {AfterViewInit, Component, ElementRef, Input, OnDestroy, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {AsyncPipe, NgFor, NgStyle} from '@angular/common';
-import {RouterLink} from '@angular/router';
-import {ReplaySubject} from 'rxjs';
+import {ReplaySubject, Subscription} from 'rxjs';
+import {resizeImage} from '../app.animations';
+import {NavigationEnd, Router} from '@angular/router';
 
 @Component({
   selector: 'app-projects-masonry',
   imports: [
     NgFor,
     AsyncPipe,
-    NgStyle,
-    RouterLink
+    NgStyle
   ],
   templateUrl: './projects-masonry.component.html',
-  host:{
+  host: {
     class: 'w-full'
-  }
+  },
+  animations: [
+    resizeImage
+  ]
 })
-export class ProjectsMasonryComponent implements AfterViewInit, OnDestroy {
+export class ProjectsMasonryComponent implements AfterViewInit, OnInit, OnDestroy {
 
   @Input() items?: {
     img: string;
@@ -29,12 +32,29 @@ export class ProjectsMasonryComponent implements AfterViewInit, OnDestroy {
   @Input() colLimits?: [minPixels: number, rows: number][];
 
   columnGap = 16;
-  height = 0
+  height = 0;
+  resizeState = 'hidden';
 
   @ViewChild('resizeContainer', {static: false}) masonryContainer!: ElementRef;
 
-  columns: ReplaySubject<{ img: string, y: number, left: number, width: number, title?: string, link?: string, subtitle?: string }[]> = new ReplaySubject(0);
+  columns: ReplaySubject<{
+    img: string,
+    y: number,
+    left: number,
+    width: number,
+    title?: string,
+    link?: string,
+    subtitle?: string
+  }[]> = new ReplaySubject(0);
   private resizeObserver?: ResizeObserver;
+
+  ngOnInit() {
+    setTimeout(() => {
+      if (this.resizeState === 'hidden') {
+        this.resizeState = 'shown';
+      }
+    }, 50);
+  }
 
   ngAfterViewInit() {
     this.resizeObserver = new ResizeObserver(() => this.updateColumns());
@@ -73,5 +93,9 @@ export class ProjectsMasonryComponent implements AfterViewInit, OnDestroy {
 
   trackByFn(index: number, item: any) {
     return item.img; // or any unique identifier
+  }
+
+  getResizeState() {
+    return this.resizeState;
   }
 }

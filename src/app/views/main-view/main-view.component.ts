@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {ProjectsMasonryComponent} from './projects-masonry/projects-masonry.component';
+import {ProjectsMasonryComponent} from '../../projects-masonry/projects-masonry.component';
 
 @Component({
   selector: 'app-main-view',
@@ -18,55 +18,103 @@ export class MainViewComponent {
     subtitle?: string
   }[] = [
     {
-      img: "images/RamenGodPage/finalImage.png",
-      originalWidth: 700,
-      originalHeight: 1000,
-      title: "Ramen God",
-      subtitle: "September 2022",
-      link: "ramen-god"
+      img: "images/projects/2023_04_heart_warming_deliveries.png",
+      originalWidth: 800,
+      originalHeight: 800,
+      title: "Heart Warming Deliveries",
+      subtitle: "April 2023",
+      link: "https://joscco.itch.io/heart-warming-deliveries"
     },
     {
-      img: "images/ProjectSection/ProjectTeasers/2021_Adventskalender.png",
+      img: "images/projects/2022_12_hedge_hurl.png",
       originalWidth: 800,
-      originalHeight: 400,
-      title: "Adventskalender 2021",
-      subtitle: "December 2021",
-      link: "adventskalender-2021"
-    }, {
-      img: "images/ProjectSection/ProjectTeasers/2021_Adventskalender.png",
+      originalHeight: 800,
+      title: "Hedge Hurl",
+      subtitle: "December 2022",
+      link: "https://joscco.itch.io/hedge-hurl"
+    },
+    {
+      img: "images/projects/2022_11_bernds_biscuits.png",
       originalWidth: 800,
-      originalHeight: 400,
-      title: "Adventskalender 2021",
-      subtitle: "December 2021",
-      link: "adventskalender-2021"
-    }, {
-      img: "images/ProjectSection/ProjectTeasers/2021_Adventskalender.png",
-      originalWidth: 800,
-      originalHeight: 400,
-      title: "Adventskalender 2021",
-      subtitle: "December 2021",
-      link: "adventskalender-2021"
-    },{
-      img: "images/ProjectSection/ProjectTeasers/2021_Adventskalender.png",
-      originalWidth: 800,
-      originalHeight: 400,
-      title: "Adventskalender 2021",
-      subtitle: "December 2021",
-      link: "adventskalender-2021"
-    }, {
-      img: "images/ProjectSection/ProjectTeasers/2021_Adventskalender.png",
-      originalWidth: 800,
-      originalHeight: 400,
-      title: "Adventskalender 2021",
-      subtitle: "December 2021",
-      link: "adventskalender-2021"
-    }, {
-      img: "images/ProjectSection/2015_Schick.png",
-      originalWidth: 800,
-      originalHeight: 400,
+      originalHeight: 800,
+      title: "Bernd's Biscuits",
+      subtitle: "November 2022",
+      link: "https://joscco.itch.io/bernds-biscuits"
+    },
+    {
+      img: "images/projects/2022_08_schick.png",
+      originalWidth: 799,
+      originalHeight: 1161,
       title: "Schick #15",
-      subtitle: "August 2015",
-      link: "schick-2015"
-    }
+      subtitle: "August 2022",
+      link: "pdf/schick_15_schmitz.pdf"
+    },
+    {
+      img: "images/projects/2022_06_dicity.png",
+      originalWidth: 800,
+      originalHeight: 800,
+      title: "Dicity",
+      subtitle: "June 2022",
+      link: "https://joscco.itch.io/dicity"
+    },
+    {
+      img: "images/projects/2022_04_dating_under_the_comet.png",
+      originalWidth: 800,
+      originalHeight: 800,
+      title: "Dating Under the Comet",
+      subtitle: "April 2022",
+      link: "https://joscco.itch.io/dating-under-the-comet"
+    },
+    {
+      img: "images/projects/2021_11_advent_calender.png",
+      originalWidth: 800,
+      originalHeight: 800,
+      title: "Adventskalender 2021",
+      subtitle: "November 2022",
+      link: "advent-calendar-2021"
+    },
+    {
+      img: "images/projects/2021_08_schick.png",
+      originalWidth: 800,
+      originalHeight: 1116,
+      title: "Schick #14",
+      subtitle: "August 2021",
+      link: "pdf/schick_14_schmitz.pdf"
+    },
+    {
+      img: "images/projects/2021_james_bot.png",
+      originalWidth: 800,
+      originalHeight: 800,
+      title: "James Bot",
+      subtitle: "2021"
+    },
+    {
+      img: "images/projects/2020_01_master_thesis.png",
+      originalWidth: 800,
+      originalHeight: 800,
+      title: "Master Thesis on the Turán-Kubilius Inequality in Probabilistic Number Theory",
+      subtitle: "January 2020",
+    },
+    {
+      img: "images/projects/2020_01_ramen_god.png",
+      originalWidth: 800,
+      originalHeight: 1142,
+      title: "Ramen God Illustration",
+      subtitle: "January 2020",
+    },
+    {
+      img: "images/projects/2018_08_bachelor_thesis.png",
+      originalWidth: 800,
+      originalHeight: 800,
+      title: "Bachelor Thesis on Point Processes",
+      subtitle: "August 2018",
+    },
+    {
+      img: "images/projects/2015_07_schick.png",
+      originalWidth: 800,
+      originalHeight: 979,
+      title: "Schick #10",
+      subtitle: "July 2015",
+    },
   ]
 }

@@ -1,19 +1,18 @@
 <div #resizeContainer class="relative w-full transition-all duration-300" [ngStyle]="{'height.px': height}">
   <div *ngFor="let item of columns | async; trackBy: trackByFn" class="absolute transition-all duration-300"
        [ngStyle]="{'left.px': item.left, 'top.px': item.y, 'width.px': item.width }">
-    <a [routerLink]="item.link" class="relative rounded-lg w-full h-full
+    <a [href]="item.link" class="relative w-full h-full
           text-[1.2rem] font-bold
           flex flex-col items-center justify-center">
-      <img [src]="item.img" alt="item.name" class="rounded-lg w-full h-auto">
-      <div class="absolute w-full h-full rounded-lg
+      <img [@resize]="getResizeState()" [src]="item.img" alt="item.name" class="w-full h-auto">
+      <div class="absolute w-full h-full
       bg-black bg-opacity-0 hover:bg-opacity-60
             text-white text-opacity-0 hover:text-opacity-100
             flex flex-col items-center justify-center p-4
             transition-all duration-300">
-        <div class="text-[1.3rem]"> {{ item.title }}</div>
+        <div class="text-[1.3rem] leading-tight text-center"> {{ item.title }}</div>
         <div class="text-[1rem]"> {{ item.subtitle }}</div>
       </div>
-
     </a>
   </div>
 </div>
