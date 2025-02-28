@@ -23,28 +23,28 @@ export class NotebookIllustrationComponent implements AfterViewInit {
     this.context = canvas.getContext('2d');
 
     this.cup = new Image();
-    this.cup.src = '/images/AboutSection/cup.png';
+    this.cup.src = 'images/AboutSection/cup.png';
 
     this.notebook = new Image();
-    this.notebook.src = '/images/AboutSection/notebook.png';
+    this.notebook.src = 'images/AboutSection/notebook.png';
 
     this.code = new Image();
-    this.code.src = '/images/AboutSection/code.png';
+    this.code.src = 'images/AboutSection/code.png';
 
     this.codeBackground = new Image();
-    this.codeBackground.src = '/images/AboutSection/codeBackground.png';
+    this.codeBackground.src = 'images/AboutSection/codeBackground.png';
 
     this.backgroundNotebook = new Image();
-    this.backgroundNotebook.src = '/images/AboutSection/backgroundNotebook.png';
+    this.backgroundNotebook.src = 'images/AboutSection/backgroundNotebook.png';
 
     this.pencil = new Image();
-    this.pencil.src = '/images/AboutSection/pen.png';
+    this.pencil.src = 'images/AboutSection/pen.png';
 
     this.smoke1 = new Image();
-    this.smoke1.src = '/images/AboutSection/smoke1.png';
+    this.smoke1.src = 'images/AboutSection/smoke1.png';
 
     this.smoke2 = new Image();
-    this.smoke2.src = '/images/AboutSection/smoke2.png';
+    this.smoke2.src = 'images/AboutSection/smoke2.png';
 
     window.requestAnimationFrame(() => this.draw());
   }
