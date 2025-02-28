@@ -117,4 +117,10 @@ export class ProjectsMasonryComponent implements AfterViewInit, OnInit, OnDestro
   onWindowScroll() {
     this.clickedItem = undefined;
   }
+
+  onPointerEnter(event: PointerEvent, item: any) {
+    if (event.pointerType === 'mouse') {
+      this.hoveredItem = item.img;
+    }
+  }
 }

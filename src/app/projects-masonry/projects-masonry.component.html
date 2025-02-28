@@ -13,8 +13,8 @@
            class="absolute w-full h-full bg-black text-white
             flex flex-col items-center justify-center p-4
             transition-all duration-300"
-           (mouseenter)="hoveredItem = item.img"
-           (mouseleave)="hoveredItem = undefined"
+           (pointerenter)="onPointerEnter($event, item)"
+           (pointerleave)="hoveredItem = undefined"
       >
         <div class="text-[1.3rem] leading-tight text-center"> {{ item.title }}</div>
         <div class="text-[1rem]"> {{ item.subtitle }}</div>
