@@ -104,9 +104,12 @@ export class ProjectsMasonryComponent implements AfterViewInit, OnInit, OnDestro
   onImageClick(item: any) {
     // For desktops, hovering over an item will already trigger a click event
     if (this.clickedItem === item.img || this.hoveredItem === item.img) {
-      window.location.href = item.link;
+      if (item.link) {
+        window.location.href = item.link;
+      }
     } else {
       this.clickedItem = item.img;
+      this.hoveredItem = undefined;
     }
   }
 
