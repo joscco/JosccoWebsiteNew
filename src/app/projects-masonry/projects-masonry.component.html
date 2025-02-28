@@ -1,15 +1,21 @@
 <div #resizeContainer class="relative w-full transition-all duration-300" [ngStyle]="{'height.px': height}">
-  <div *ngFor="let item of columns | async; trackBy: trackByFn" class="absolute transition-all duration-300"
+  <div *ngFor="let item of columns | async; trackBy: trackByFn" class="absolute transition-all duration-200"
        [ngStyle]="{'top.px': item.y, 'left.px': item.left, 'width.px': item.width }">
-    <a [href]="item.link" class="relative w-full h-full
+    <a (click)="onImageClick(item)" class="relative w-full h-full
           text-[1.2rem] font-bold
-          flex flex-col items-center justify-center">
+          flex flex-col items-center justify-center"
+    [ngClass]="{'cursor-pointer': item.link}">
       <img [@resize]="getResizeState()" [src]="item.img" alt="item.name" class="w-full h-auto">
-      <div class="absolute w-full h-full
-      bg-black bg-opacity-0 hover:bg-opacity-60
-            text-white text-opacity-0 hover:text-opacity-100
+      <div [ngClass]="{
+            'bg-opacity-60 text-opacity-100': clickedItem === item.img || hoveredItem === item.img,
+            'bg-opacity-0 text-opacity-0': clickedItem !== item.img && hoveredItem !== item.img
+          }"
+           class="absolute w-full h-full bg-black text-white
             flex flex-col items-center justify-center p-4
-            transition-all duration-300">
+            transition-all duration-300"
+           (mouseenter)="hoveredItem = item.img"
+           (mouseleave)="hoveredItem = undefined"
+      >
         <div class="text-[1.3rem] leading-tight text-center"> {{ item.title }}</div>
         <div class="text-[1rem]"> {{ item.subtitle }}</div>
       </div>

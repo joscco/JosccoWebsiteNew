@@ -71,7 +71,6 @@ export class MainViewComponent {
       originalHeight: 800,
       title: "Adventskalender 2021",
       subtitle: "November 2022",
-      link: "advent-calendar-2021"
     },
     {
       img: "images/projects/2021_08_schick.png",
@@ -94,6 +93,7 @@ export class MainViewComponent {
       originalHeight: 800,
       title: "Master Thesis on the Turán-Kubilius Inequality in Probabilistic Number Theory",
       subtitle: "January 2020",
+      link: "pdf/master_thesis_schmitz.pdf"
     },
     {
       img: "images/projects/2020_01_ramen_god.png",
@@ -108,13 +108,15 @@ export class MainViewComponent {
       originalHeight: 800,
       title: "Bachelor Thesis on Point Processes",
       subtitle: "August 2018",
+      link: "pdf/bachelor_thesis_schmitz.pdf"
     },
     {
       img: "images/projects/2015_07_schick.png",
       originalWidth: 800,
       originalHeight: 979,
-      title: "Schick #10",
+      title: "Schick #8",
       subtitle: "July 2015",
+      link: "pdf/schick_8_schmitz.pdf"
     },
   ]
 }

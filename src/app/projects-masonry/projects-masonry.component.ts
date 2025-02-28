@@ -1,5 +1,5 @@
-import {AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {AsyncPipe, NgFor, NgStyle} from '@angular/common';
+import {AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild, HostListener} from '@angular/core';
+import {AsyncPipe, NgClass, NgFor, NgStyle} from '@angular/common';
 import {ReplaySubject} from 'rxjs';
 import {resizeImage} from '../app.animations';
 
@@ -8,7 +8,8 @@ import {resizeImage} from '../app.animations';
   imports: [
     NgFor,
     AsyncPipe,
-    NgStyle
+    NgStyle,
+    NgClass
   ],
   templateUrl: './projects-masonry.component.html',
   host: {
@@ -33,6 +34,8 @@ export class ProjectsMasonryComponent implements AfterViewInit, OnInit, OnDestro
   columnGap = 16;
   height = 0;
   resizeState = 'hidden';
+  clickedItem?: string;
+  hoveredItem?: string;
 
   @ViewChild('resizeContainer', {static: false}) masonryContainer!: ElementRef;
 
@@ -96,5 +99,19 @@ export class ProjectsMasonryComponent implements AfterViewInit, OnInit, OnDestro
 
   getResizeState() {
     return this.resizeState;
+  }
+
+  onImageClick(item: any) {
+    // For desktops, hovering over an item will already trigger a click event
+    if (this.clickedItem === item.img || this.hoveredItem === item.img) {
+      window.location.href = item.link;
+    } else {
+      this.clickedItem = item.img;
+    }
+  }
+
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    this.clickedItem = undefined;
   }
 }
