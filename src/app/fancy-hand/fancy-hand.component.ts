@@ -27,14 +27,14 @@ export class FancyHandComponent implements OnInit, OnDestroy {
   itemPositions: {left: string, top: string, zIndex: number}[] = []
 
   minImages = [
-    { path: './images/StartSection/cloud1.png', alt: 'Cloud 1 Icon' },
-    { path: './images/StartSection/cloud2.png', alt: 'Cloud 2 Icon' },
-    { path: './images/StartSection/cloud3.png', alt: 'Cloud 3 Icon' },
-    { path: './images/StartSection/javaIcon.png', alt: 'Java Icon' },
-    { path: './images/StartSection/typescriptIcon.png', alt: 'Typescript Icon' },
-    { path: './images/StartSection/primeIcon.png', alt: 'Math Icon' },
-    { path: './images/StartSection/godotIcon.png', alt: 'Godot Icon' },
-    { path: './images/StartSection/functionIcon.png', alt: 'Code Icon' }
+    { path: 'images/StartSection/cloud1.png', alt: 'Cloud 1 Icon' },
+    { path: 'images/StartSection/cloud2.png', alt: 'Cloud 2 Icon' },
+    { path: 'images/StartSection/cloud3.png', alt: 'Cloud 3 Icon' },
+    { path: 'images/StartSection/javaIcon.png', alt: 'Java Icon' },
+    { path: 'images/StartSection/typescriptIcon.png', alt: 'Typescript Icon' },
+    { path: 'images/StartSection/primeIcon.png', alt: 'Math Icon' },
+    { path: 'images/StartSection/godotIcon.png', alt: 'Godot Icon' },
+    { path: 'images/StartSection/functionIcon.png', alt: 'Code Icon' }
   ];
 
   ngOnInit() {
