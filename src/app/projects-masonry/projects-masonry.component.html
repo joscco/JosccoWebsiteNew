@@ -1,6 +1,6 @@
 <div #resizeContainer class="relative w-full transition-all duration-300" [ngStyle]="{'height.px': height}">
   <div *ngFor="let item of columns | async; trackBy: trackByFn" class="absolute transition-all duration-300"
-       [ngStyle]="{'left.px': item.left, 'top.px': item.y, 'width.px': item.width }">
+       [ngStyle]="{'top.px': item.y, 'left.px': item.left, 'width.px': item.width }">
     <a [href]="item.link" class="relative w-full h-full
           text-[1.2rem] font-bold
           flex flex-col items-center justify-center">

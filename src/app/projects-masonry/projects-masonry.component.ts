@@ -1,8 +1,7 @@
 import {AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {AsyncPipe, NgFor, NgStyle} from '@angular/common';
-import {ReplaySubject, Subscription} from 'rxjs';
+import {ReplaySubject} from 'rxjs';
 import {resizeImage} from '../app.animations';
-import {NavigationEnd, Router} from '@angular/router';
 
 @Component({
   selector: 'app-projects-masonry',
