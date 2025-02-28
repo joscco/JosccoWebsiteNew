@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild, HostListener} from '@angular/core';
-import {AsyncPipe, NgClass, NgFor, NgStyle} from '@angular/common';
+import {AsyncPipe, NgClass, NgFor, NgIf, NgStyle} from '@angular/common';
 import {ReplaySubject} from 'rxjs';
 import {resizeImage} from '../app.animations';
 
@@ -9,7 +9,8 @@ import {resizeImage} from '../app.animations';
     NgFor,
     AsyncPipe,
     NgStyle,
-    NgClass
+    NgClass,
+    NgIf
   ],
   templateUrl: './projects-masonry.component.html',
   host: {
@@ -102,7 +103,8 @@ export class ProjectsMasonryComponent implements AfterViewInit, OnInit, OnDestro
   }
 
   onImageClick(item: any) {
-    // For desktops, hovering over an item will already trigger a click event
+    // For mobile devices, the hoveredItem will be undefined
+    // So the link must be clicked twice to navigate
     if (this.clickedItem === item.img || this.hoveredItem === item.img) {
       if (item.link) {
         window.location.href = item.link;
@@ -119,6 +121,7 @@ export class ProjectsMasonryComponent implements AfterViewInit, OnInit, OnDestro
   }
 
   onPointerEnter(event: PointerEvent, item: any) {
+    // Hovering items should only be possible with mouse
     if (event.pointerType === 'mouse') {
       this.hoveredItem = item.img;
     }

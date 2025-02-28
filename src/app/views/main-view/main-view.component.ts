@@ -91,7 +91,7 @@ export class MainViewComponent {
       img: "images/projects/2020_01_master_thesis.png",
       originalWidth: 800,
       originalHeight: 800,
-      title: "Master Thesis on the Turán-Kubilius Inequality in Probabilistic Number Theory",
+      title: "Master Thesis on Probabilistic Number Theory",
       subtitle: "January 2020",
       link: "pdf/master_thesis_schmitz.pdf"
     },

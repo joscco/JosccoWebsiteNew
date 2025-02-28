@@ -18,6 +18,7 @@
       >
         <div class="text-[1.3rem] leading-tight text-center"> {{ item.title }}</div>
         <div class="text-[1rem]"> {{ item.subtitle }}</div>
+        <div class="text-[1.2rem] pt-2" *ngIf="item.link"> Click for more </div>
       </div>
     </a>
   </div>

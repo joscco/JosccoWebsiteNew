@@ -1,17 +1,15 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component} from '@angular/core';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-logo',
+  imports: [
+    RouterLink
+  ],
   templateUrl: './logo.component.html'
 })
 export class LogoComponent {
-  @Input() menuActive: boolean = false;
-  @Output() toggleMenuActive = new EventEmitter<void>();
   hovered: boolean = false;
-
-  onLogoClick(): void {
-    this.toggleMenuActive.emit();
-  }
 
   onEnter() {
     this.hovered = true;
