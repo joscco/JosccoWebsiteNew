@@ -1,13 +1,8 @@
-import { Component } from '@angular/core';
-import {NotebookIllustrationComponent} from "../../notebook-illustration/notebook-illustration.component";
-import {NgOptimizedImage} from '@angular/common';
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'app-contact-view',
-  imports: [
-    NotebookIllustrationComponent,
-    NgOptimizedImage
-  ],
+  imports: [],
   templateUrl: './contact-view.component.html'
 })
 export class ContactViewComponent {
