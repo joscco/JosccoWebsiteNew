@@ -1,34 +1,47 @@
-<div class="pb-24 flex items-center justify-center flex-col">
+<div class="h-full pb-4 flex items-center justify-center flex-col">
   <div class="w-full px-4 lg:max-w-[980px] justify-start items-center flex flex-1 flex-col flex-nowrap">
-    <div class="flex flex-col-reverse md:flex-row md:px-4">
-      <div class="flex-1 flex flex-col justify-center px-4">
-        <div class="text-[2.2rem] md:text-[2.5rem] font-bold pb-2 px-4">Hi, I’m Jonathan!</div>
-        <div class="text-[1.1rem] md:text-[1.2rem] text-left font-semibold py-2 text-zinc-500 px-4">
-          I'm a software developer based in Nuremberg, Germany, living in Tönisvorst.
-        </div>
-        <div class="text-[1.1rem] md:text-[1.2rem] text-left font-semibold text-zinc-500 px-4">
-          My interests include mathematics, illustration, music, and game design.
-        </div>
-      </div>
-      <div class="flex-1 flex flex-col items-center px-4">
-        <app-notebook-illustration></app-notebook-illustration>
-      </div>
+    <div class="w-full flex flex-col-reverse md:flex-row md:px-4">
+      <div class="w-full flex-1 flex flex-col justify-center px-4">
+        <div
+          #meadow
+          class="flex items-center justify-center flex-col relative w-full h-full bg-gray-300 no-select"
+          (mousemove)="onMouseMove($event)"
+          (mouseup)="onMouseUp($event)"
+          (mousedown)="onMouseDown($event)"
+        >
+          <div
+            #textBox
+            class="absolute text-center bg-white p-4 rounded shadAow-md"
+            [style.top.%]="50"
+            [style.left.%]="50"
+            [style.transform]="'translate(-50%, -50%)'"
+          >
+            <div class="text-lg md:text-xl font-bold pb-2 px-4 select-none">About Me</div>
+            <div class="text-base md:text-lg text-left font-semibold py-2 text-zinc-500 px-4 select-none">
+              I'm a software developer based in Nuremberg, Germany, living in Tönisvorst. My interests include
+              mathematics, illustration, music, and game design.
+            </div>
+            <div class="text-base md:text-lg text-left font-semibold py-2 text-zinc-500 px-4 select-none">
+              I studied mathematics in Siegen and Düsseldorf and have been working as a software developer since 2020.
+              Blending these interests into personal projects is one of my favorite things — right after time with my
+              people and dogs.
+            </div>
+          </div>
 
-    </div>
-    <div class="flex flex-col md:flex-row md:px-4">
-      <div class="flex-1 flex flex-col items-center px-4">
-        <app-notebook-illustration></app-notebook-illustration>
-      </div>
-      <div class="flex-1 flex flex-col justify-center px-4">
-        <div class="text-[2.2rem] md:text-[2.5rem] font-bold pb-2 px-4">About Me</div>
-        <div class="text-[1.1rem] md:text-[1.2rem] text-left font-semibold py-2 text-zinc-500 px-4">
-          I studied mathematics in Siegen and Düsseldorf and have been working as a software developer since 2020.
+          <img
+            *ngFor="let flower of flowers; let i = index"
+            src="images/AboutSection/flower.png"
+            [style.left.px]="flower.x"
+            [style.top.px]="flower.y"
+            [style.position]="'absolute'"
+            [style.width.px]="50"
+            [style.height.px]="50"
+            class="select-none"
+            [@scaleIn]
+            alt="Flower"
+          />
         </div>
-        <div class="text-[1.1rem] md:text-[1.2rem] text-left font-semibold text-zinc-500 px-4">
-          Blending these interests into personal projects is one of my favorite things — right after time with my people and dogs.
-        </div>
       </div>
-
     </div>
   </div>
 </div>

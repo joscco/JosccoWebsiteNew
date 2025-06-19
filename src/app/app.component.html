@@ -1,6 +1,6 @@
-<div class="w-full">
+<div class="flex flex-col w-full min-h-screen">
   <app-nav-bar></app-nav-bar>
-  <div [@fadeInAndOutAnimations]="getRouteAnimationData()">
+  <div class="flex-1" [@fadeInAndOutAnimations]="getRouteAnimationData()">
     <router-outlet></router-outlet>
   </div>
 </div>
