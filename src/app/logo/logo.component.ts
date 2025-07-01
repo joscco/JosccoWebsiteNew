@@ -16,12 +16,12 @@ export class LogoComponent implements AfterViewInit{
   @ViewChildren('letterImg') letterImages!: QueryList<ElementRef>;
 
   letters = [
-    { src: '/svg/Joscco_0.svg', alt: "J", alternatives: ['/svg/Note.svg'], default: '/svg/Joscco_0.svg' },
-    { src: '/svg/Joscco_1.svg', alt: "o", alternatives: ['/svg/Zero.svg'], default: '/svg/Joscco_1.svg' },
-    { src: '/svg/Joscco_2.svg', alt: "s", alternatives: ['/svg/Sigma.svg'], default: '/svg/Joscco_2.svg' },
-    { src: '/svg/Joscco_3.svg', alt: "c", alternatives: [], default: '/svg/Joscco_3.svg' },
-    { src: '/svg/Joscco_4.svg', alt: "c", alternatives: ['/svg/KO.svg'], default: '/svg/Joscco_4.svg' },
-    { src: '/svg/Joscco_5.svg', alt: "o", alternatives: ['/svg/Head.svg'], default: '/svg/Joscco_5.svg' }
+    { src: 'svg/Joscco_0.svg', alt: "J", alternatives: ['svg/Note.svg'], default: 'svg/Joscco_0.svg' },
+    { src: 'svg/Joscco_1.svg', alt: "o", alternatives: ['svg/Zero.svg'], default: 'svg/Joscco_1.svg' },
+    { src: 'svg/Joscco_2.svg', alt: "s", alternatives: ['svg/Sigma.svg'], default: 'svg/Joscco_2.svg' },
+    { src: 'svg/Joscco_3.svg', alt: "c", alternatives: [], default: '/svg/Joscco_3.svg' },
+    { src: 'svg/Joscco_4.svg', alt: "c", alternatives: ['svg/KO.svg'], default: 'svg/Joscco_4.svg' },
+    { src: 'svg/Joscco_5.svg', alt: "o", alternatives: ['svg/Head.svg'], default: 'svg/Joscco_5.svg' }
   ];
 
   private lastReplacedIndex: number | null = null;
