@@ -55,7 +55,7 @@ export class LogoComponent implements AfterViewInit {
       for (let i = 0; i < randomSwitches; i++) {
         const randomAlternative = this.globalAlternatives[Math.floor(Math.random() * this.globalAlternatives.length)];
         gsap.to(letterElement.nativeElement, {
-          scale: 0,
+          scale: 0.9,
           delay: delays + i * 0.2,
           duration: 0.15,
           onComplete: () => {
@@ -67,7 +67,7 @@ export class LogoComponent implements AfterViewInit {
 
       // Return to default at the end
       gsap.to(letterElement.nativeElement, {
-        scale: 0,
+        scale: 0.9,
         delay: delays + randomSwitches * 0.2,
         duration: 0.15,
         onComplete: () => {
