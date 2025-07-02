@@ -18,6 +18,14 @@ export class MainViewComponent {
     subtitle?: string
   }[] = [
     {
+      img: "images/projects/2025_04_grannies_gotcha.png",
+      originalWidth: 800,
+      originalHeight: 800,
+      title: "Granny's Gotcha",
+      subtitle: "April 2025",
+      link: "https://joscco.itch.io/grannys-gotcha"
+    },
+    {
       img: "images/projects/2023_04_heart_warming_deliveries.png",
       originalWidth: 800,
       originalHeight: 800,
