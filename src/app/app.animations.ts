@@ -1,7 +1,7 @@
 import {animate, group, query, state, style, transition, trigger} from '@angular/animations';
 
 export const fadeInAndOutAnimations = trigger('fadeInAndOutAnimations', [
-  transition('contact => work, contact => about, about => work', [
+  transition('contact => work, contact => about, about => work, * => post', [
     query(':enter, :leave',
     style({ position: 'fixed',  width: '100%' }),
     { optional: true }),
@@ -18,7 +18,7 @@ export const fadeInAndOutAnimations = trigger('fadeInAndOutAnimations', [
       ], { optional: true }),
     ])
   ]),
-  transition('work => about, work => contact, about => contact', [
+  transition('work => about, work => contact, about => contact, post => work, post => about, post => contact, error => *', [
     query(':enter, :leave',
       style({ position: 'fixed',  width: '100%' }),
       { optional: true }),

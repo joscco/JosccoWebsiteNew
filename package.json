@@ -19,8 +19,12 @@
     "@angular/platform-browser-dynamic": "^20.0.4",
     "@angular/router": "^20.0.4",
     "@material/image-list": "^14.0.0",
+    "@tailwindcss/typography": "^0.5.16",
     "gsap": "^3.13.0",
+    "katex": "^0.16.22",
+    "ngx-markdown": "^20.0.0",
     "phaser": "^3.90.0",
+    "prismjs": "^1.30.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
