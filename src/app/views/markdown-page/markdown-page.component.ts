@@ -25,7 +25,7 @@ export class MarkdownPageComponent implements OnInit {
     // Check if the filename is valid and file exists
 
     if (filename) {
-      const filePath = `/posts/${filename}.md`;
+      const filePath = `posts/${filename}.md`;
       this.http.get(filePath, {responseType: 'text'}).subscribe({
         next: () => {
           this.fileName = filePath;
