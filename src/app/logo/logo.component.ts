@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, OnInit, QueryList, ViewChildren} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnDestroy, QueryList, ViewChildren} from '@angular/core';
 import {RouterLink} from '@angular/router';
 import {NgForOf} from '@angular/common';
 import {gsap} from 'gsap';
@@ -11,7 +11,7 @@ import {gsap} from 'gsap';
   ],
   templateUrl: './logo.component.html'
 })
-export class LogoComponent implements AfterViewInit {
+export class LogoComponent implements AfterViewInit, OnDestroy {
 
   @ViewChildren('letterImg') letterImages!: QueryList<ElementRef>;
   @ViewChildren('altImg') altImages!: QueryList<ElementRef>;
@@ -26,46 +26,64 @@ export class LogoComponent implements AfterViewInit {
   ];
 
   private lastReplacedIndex: number | null = null;
+  private lastTimestamp = 0;
+  private interval = 3000;
+  private tickerFunction?: () => void;
 
   ngAfterViewInit() {
-    this.altImages.forEach((img, index) => {
-      gsap.set(img.nativeElement, {scale: 0});
+    this.altImages.forEach((img) => {
+      gsap.set(img.nativeElement, { scale: 0 });
     });
-    setInterval(() => {
-      let randomIndex: number;
-      let letter: { alt: string; alternatives: string[]; default: string };
 
-      // Find a valid random index
-      do {
-        randomIndex = Math.floor(Math.random() * this.letters.length);
-        letter = this.letters[randomIndex];
-      } while (randomIndex === this.lastReplacedIndex || letter.alternatives.length === 0);
+    this.tickerFunction = () => {
+      if (document.hidden) return; // Tab ist inaktiv → überspringen
 
-      const newSrc = letter.alternatives[Math.floor(Math.random() * letter.alternatives.length)];
-
-      // Reset the last replaced letter to its default
-      if (this.lastReplacedIndex !== null) {
-        const lastImgElement = this.letterImages.toArray()[this.lastReplacedIndex].nativeElement;
-        const lastAltImgElement = this.altImages.toArray()[this.lastReplacedIndex].nativeElement;
-        gsap.to(lastAltImgElement, {
-          scale: 0, duration: 0.15, onComplete: () => {
-            gsap.to(lastImgElement, {scale: 1, duration: 0.15});
-          }
-        });
-
+      const now = Date.now();
+      if (now - this.lastTimestamp >= this.interval) {
+        this.swapLetter();
+        this.lastTimestamp = now;
       }
+    };
 
-      // Replace the current letter
-      const imgElement = this.letterImages.toArray()[randomIndex].nativeElement;
-      const alternativeImgElement = this.altImages.toArray()[randomIndex].nativeElement;
-      gsap.to(imgElement, {
+    gsap.ticker.add(this.tickerFunction);
+  }
+
+  ngOnDestroy() {
+    if (!this.tickerFunction) return;
+    gsap.ticker.remove(this.tickerFunction);
+  }
+
+  private swapLetter() {
+    let randomIndex: number;
+    let letter: { alt: string; alternatives: string[]; default: string };
+
+    do {
+      randomIndex = Math.floor(Math.random() * this.letters.length);
+      letter = this.letters[randomIndex];
+    } while (randomIndex === this.lastReplacedIndex || letter.alternatives.length === 0);
+
+    const newSrc = letter.alternatives[Math.floor(Math.random() * letter.alternatives.length)];
+
+    if (this.lastReplacedIndex !== null) {
+      const lastImgElement = this.letterImages.toArray()[this.lastReplacedIndex].nativeElement;
+      const lastAltImgElement = this.altImages.toArray()[this.lastReplacedIndex].nativeElement;
+
+      gsap.to(lastAltImgElement, {
         scale: 0, duration: 0.15, onComplete: () => {
-          gsap.to(alternativeImgElement, {scale: 1, duration: 0.15});
+          gsap.to(lastImgElement, { scale: 1, duration: 0.15 });
         }
       });
+    }
 
-      // Update the last replaced index
-      this.lastReplacedIndex = randomIndex;
-    }, 3000); // Replace every 3 seconds
+    const imgElement = this.letterImages.toArray()[randomIndex].nativeElement;
+    const alternativeImgElement = this.altImages.toArray()[randomIndex].nativeElement;
+
+    gsap.to(imgElement, {
+      scale: 0, duration: 0.15, onComplete: () => {
+        gsap.to(alternativeImgElement, { scale: 1, duration: 0.15 });
+      }
+    });
+
+    this.lastReplacedIndex = randomIndex;
   }
 }
