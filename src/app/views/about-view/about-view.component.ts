@@ -1,11 +1,11 @@
 import {Component, HostBinding} from '@angular/core';
-import {FlowerMeadowComponent} from './flower-meadow/flower-meadow.component';
+import { DeskSceneComponent} from './desk/desk.component';
 
 @Component({
   selector: 'app-about-view',
   templateUrl: './about-view.component.html',
   imports: [
-    FlowerMeadowComponent
+    DeskSceneComponent
   ]
 })
 export class AboutViewComponent{

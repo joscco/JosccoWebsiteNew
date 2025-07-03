@@ -1,0 +1,26 @@
+<div class="relative w-full">
+  <div #deskWrapper class="absolute left-1/2 -translate-x-1/2 top-0 w-full max-w-[850px] h-[250px] bg-[#e4d6bc]">
+    <app-desk-item
+      *ngFor="let item of getDeskItems()"
+      [id]="item.id"
+      [type]="item.type"
+      [position]="item.position"
+      [width]="item.width"
+    ></app-desk-item>
+  </div>
+  <app-desk-item
+    *ngFor="let item of getWallItems()"
+    [id]="item.id"
+    [type]="item.type"
+    [position]="item.position"
+    [width]="item.width"
+  ></app-desk-item>
+</div>
+<div class="mt-4 flex flex-col gap-4 w-12">
+  <button (click)="logAndSavePositions()" class="px-4 py-2 bg-blue-500 text-white rounded">
+    Positionen speichern
+  </button>
+  <button (click)="resetPositions()" class="px-4 py-2 bg-gray-300 rounded">
+    Zurücksetzen
+  </button>
+</div>
