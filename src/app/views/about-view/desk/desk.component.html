@@ -1,26 +1,43 @@
-<div class="relative w-full">
-  <div #deskWrapper class="absolute left-1/2 -translate-x-1/2 top-0 w-full max-w-[850px] h-[250px] bg-[#e4d6bc]">
-    <app-desk-item
-      *ngFor="let item of getDeskItems()"
-      [id]="item.id"
-      [type]="item.type"
-      [position]="item.position"
-      [width]="item.width"
-    ></app-desk-item>
+<div
+  class="relative w-full h-[400px]"
+  #deskWrapper
+  (pointermove)="onPointerMove($event)"
+  (pointerup)="onPointerUp()"
+  (pointerleave)="onPointerUp()"
+>
+  <div class="fixed bottom-4 right-4 flex flex-col gap-2 z-50">
+    <button
+      (click)="toggleEditMode()"
+      class="bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700 transition"
+    >
+      {{ isEditMode ? 'Edit-Modus beenden' : 'Edit-Modus starten' }}
+    </button>
+
+    <button
+      (click)="resetPositions()"
+      class="bg-gray-300 text-black px-4 py-2 rounded shadow hover:bg-gray-400 transition"
+    >
+      Positionen zurücksetzen
+    </button>
+
+    <button (click)="logCurrentPositions()" class="px-4 py-2 bg-green-500 text-white rounded">
+      Positionen loggen
+    </button>
   </div>
-  <app-desk-item
-    *ngFor="let item of getWallItems()"
-    [id]="item.id"
-    [type]="item.type"
-    [position]="item.position"
-    [width]="item.width"
-  ></app-desk-item>
-</div>
-<div class="mt-4 flex flex-col gap-4 w-12">
-  <button (click)="logAndSavePositions()" class="px-4 py-2 bg-blue-500 text-white rounded">
-    Positionen speichern
-  </button>
-  <button (click)="resetPositions()" class="px-4 py-2 bg-gray-300 rounded">
-    Zurücksetzen
-  </button>
+
+  <!-- Tischfläche -->
+  <div class="absolute top-[250px] h-[150px] w-full bg-[#e4d6bc] z-0"></div>
+
+  <!-- Elemente -->
+  @for (item of items; track item.id; let i = $index) {
+    <img #item
+      [src]="'images/about/' + item.id + '.png'"
+      [style.left.px]="getScreenX(item.relX)"
+      [style.top.px]="item.y"
+      [style.width.px]="item.width"
+      class="absolute z-10 cursor-pointer select-none"
+      (pointerdown)="onPointerDown($event, item.id)"
+    />
+  }
+
 </div>
