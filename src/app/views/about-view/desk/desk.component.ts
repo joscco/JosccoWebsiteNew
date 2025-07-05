@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  OnDestroy,
   Component,
   ElementRef,
   HostBinding,
@@ -14,7 +15,8 @@ import gsap from 'gsap';
 export interface DeskItem {
   id: string;
   type: 'wall' | 'table';
-  relX: number;  // relativ zur Mitte: -100 bis +100 usw.
+  intendedRelativeX: number;  // relativ zur Mitte: -100 bis +100 usw.
+  x?: number,
   y: number;     // absolut
   width: number;
 }
@@ -24,20 +26,25 @@ export interface DeskItem {
   templateUrl: './desk.component.html',
   imports: []
 })
-export class DeskSceneComponent implements OnInit, AfterViewInit {
+export class DeskSceneComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('deskWrapper', {static: true}) deskWrapper!: ElementRef;
   @HostBinding('class') class = 'h-full w-full relative';
 
   @ViewChildren('item') itemRefs!: QueryList<ElementRef>;
 
-  deskWidth = 850; // Standardwert
+  maxDeskWidth = 1000; // Standardwert
+  deskWidth = 0;
   isEditMode = false;
 
   defaultItems: DeskItem[] = [
-    {"id": "notebook", "type": "table", "relX": -95, "y": 156, "width": 250},
-    {"id": "coffee", "type": "table", "relX": 137, "y": 208, "width": 80},
-    {"id": "right_photo", "type": "wall", "relX": -220, "y": 14, "width": 100},
-    {"id": "left_photo", "type": "wall", "relX": 152, "y": 37, "width": 100}
+    {"id": "block", "type": "table", "intendedRelativeX": -168, "y": 117, "width": 100, "x": -168},
+    {"id": "coffee", "type": "table", "intendedRelativeX": 167, "y": 6, "width": 80, "x": 167},
+    {"id": "keyboard", "type": "table", "intendedRelativeX": 286, "y": 87, "width": 200, "x": 286},
+    {"id": "left_photo", "type": "wall", "intendedRelativeX": 285, "y": -323, "width": 100, "x": 285},
+    {"id": "notebook", "type": "table", "intendedRelativeX": 0, "y": 2, "width": 250, "x": 0},
+    {"id": "paper", "type": "table", "intendedRelativeX": -275, "y": 45, "width": 70, "x": -275},
+    {"id": "pencils", "type": "table", "intendedRelativeX": -197, "y": -5, "width": 50, "x": -197},
+    {"id": "right_photo", "type": "wall", "intendedRelativeX": -295, "y": -247, "width": 100, "x": -295}
   ]
 
   items: DeskItem[] = [];
@@ -45,7 +52,8 @@ export class DeskSceneComponent implements OnInit, AfterViewInit {
   draggingId: string | null = null;
   dragOffset = {x: 0, y: 0};
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  constructor(private cdr: ChangeDetectorRef) {
+  }
 
   ngOnInit() {
     const saved = localStorage.getItem('desk-layout');
@@ -53,10 +61,10 @@ export class DeskSceneComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.deskWidth = this.deskWrapper.nativeElement.offsetWidth;
+    this.resizeTableAndRepositionItems();
 
     window.addEventListener('resize', () => {
-      this.deskWidth = this.deskWrapper.nativeElement.offsetWidth;
+      this.resizeTableAndRepositionItems();
     });
 
     this.cdr.detectChanges()
@@ -65,6 +73,13 @@ export class DeskSceneComponent implements OnInit, AfterViewInit {
       this.deskWrapper.nativeElement,
       {y: '100%', opacity: 0},
       {y: '0%', opacity: 1, duration: 1, ease: 'power2.out'}
+    );
+  }
+
+  ngOnDestroy() {
+    gsap.to(
+      this.deskWrapper.nativeElement,
+      {y: '100%', opacity: 0, duration: 1, ease: 'power2.out'},
     );
   }
 
@@ -91,12 +106,24 @@ export class DeskSceneComponent implements OnInit, AfterViewInit {
     return screenX - this.deskWidth / 2;
   }
 
+  resizeTableAndRepositionItems() {
+    this.deskWidth = Math.min(this.deskWrapper.nativeElement.offsetWidth, this.maxDeskWidth)
+    const deskWithHalf = this.deskWidth / 2;
+    this.items = this.items.map(item => {
+      return {
+        ...item,
+        "x": this.getRealScreenX(item.intendedRelativeX)
+      }
+    })
+    this.cdr.detectChanges()
+  }
+
   onPointerDown(event: PointerEvent, itemId: string) {
     this.draggingId = itemId;
     const item = this.items.find(i => i.id === itemId);
     if (!item) return;
 
-    this.dragOffset.x = event.clientX - this.getScreenX(item.relX);
+    this.dragOffset.x = event.clientX - this.getScreenX(item.intendedRelativeX);
     this.dragOffset.y = event.clientY - item.y;
 
     event.preventDefault();
@@ -114,16 +141,17 @@ export class DeskSceneComponent implements OnInit, AfterViewInit {
     const newRelX = this.getRelativeX(newScreenX);
     const newY = event.clientY - this.dragOffset.y;
 
-    // Bereichsprüfung
-    // if (item.type === 'table' && newY < 10) return;
-    // if (item.type === 'wall' && newY >= 200) return;
-
-    item.relX = Math.round(newRelX);
+    item.intendedRelativeX = Math.round(newRelX);
+    item.x = this.getRealScreenX(item.intendedRelativeX);
     item.y = Math.round(newY);
   }
 
   onPointerUp() {
     this.draggingId = null;
     localStorage.setItem('desk-layout', JSON.stringify(this.items));
+  }
+
+  private getRealScreenX(intendedRelativeX: number): number {
+    return Math.min(Math.max(intendedRelativeX, -this.deskWidth / 2), this.deskWidth / 2)
   }
 }
