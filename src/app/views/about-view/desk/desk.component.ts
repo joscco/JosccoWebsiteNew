@@ -37,14 +37,14 @@ export class DeskSceneComponent implements OnInit, AfterViewInit, OnDestroy {
   isEditMode = false;
 
   defaultItems: DeskItem[] = [
-    {"id": "block", "type": "table", "intendedRelativeX": -168, "y": 117, "width": 100, "x": -168},
-    {"id": "coffee", "type": "table", "intendedRelativeX": 167, "y": 6, "width": 80, "x": 167},
-    {"id": "keyboard", "type": "table", "intendedRelativeX": 286, "y": 87, "width": 200, "x": 286},
-    {"id": "left_photo", "type": "wall", "intendedRelativeX": 285, "y": -323, "width": 100, "x": 285},
-    {"id": "notebook", "type": "table", "intendedRelativeX": 0, "y": 2, "width": 250, "x": 0},
-    {"id": "paper", "type": "table", "intendedRelativeX": -275, "y": 45, "width": 70, "x": -275},
-    {"id": "pencils", "type": "table", "intendedRelativeX": -197, "y": -5, "width": 50, "x": -197},
-    {"id": "right_photo", "type": "wall", "intendedRelativeX": -295, "y": -247, "width": 100, "x": -295}
+    {"id": "block", "type": "table", "intendedRelativeX": -161, "y": 115, "width": 100, "x": -161},
+    {"id": "coffee", "type": "table", "intendedRelativeX": 166, "y": 8, "width": 80, "x": 166},
+    {"id": "keyboard", "type": "table", "intendedRelativeX": 118, "y": 148, "width": 200, "x": 118},
+    {"id": "left_photo", "type": "wall", "intendedRelativeX": 285, "y": -323, "width": 100, "x": 195},
+    {"id": "notebook", "type": "table", "intendedRelativeX": 0, "y": -1, "width": 250, "x": 0},
+    {"id": "paper", "type": "table", "intendedRelativeX": -208, "y": 34, "width": 70, "x": -195},
+    {"id": "pencils", "type": "table", "intendedRelativeX": -142, "y": -11, "width": 50, "x": -142},
+    {"id": "right_photo", "type": "wall", "intendedRelativeX": -295, "y": -247, "width": 100, "x": -195}
   ]
 
   items: DeskItem[] = [];
@@ -144,6 +144,8 @@ export class DeskSceneComponent implements OnInit, AfterViewInit, OnDestroy {
     item.intendedRelativeX = Math.round(newRelX);
     item.x = this.getRealScreenX(item.intendedRelativeX);
     item.y = Math.round(newY);
+
+    event.preventDefault();
   }
 
   onPointerUp() {

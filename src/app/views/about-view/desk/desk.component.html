@@ -7,27 +7,27 @@
 >
   <!-- Tischfläche -->
   <div
-    class="relative bottom-0 left-1/2 -translate-x-1/2 h-[200px] bg-[#e4d6bc] z-0 "
+    class="relative bottom-0 left-1/2 -translate-x-1/2 h-[200px] bg-[#e4d6bc] z-0"
     [style.width.px]="deskWidth"
   >
     <!-- Buttons -->
-    <div class="absolute right-4 bottom-4 flex flex-row gap-2 z-50">
+    <div class="absolute right-4 bottom-[220px] flex flex-col w-16 gap-2 z-50 text-sm">
       <button
         (click)="toggleEditMode()"
         class="bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700 transition"
       >
-        {{ isEditMode ? 'Edit-Modus beenden' : 'Edit-Modus starten' }}
+        {{ isEditMode ? 'Stop Edit' : 'Edit' }}
       </button>
 
       <button
         (click)="resetPositions()"
         class="bg-gray-300 text-black px-4 py-2 rounded shadow hover:bg-gray-400 transition"
       >
-        Positionen zurücksetzen
+        Reset
       </button>
 
       <button (click)="logCurrentPositions()" class="px-4 py-2 bg-green-500 text-white rounded">
-        Positionen loggen
+        Log
       </button>
     </div>
     <!-- Elemente -->
