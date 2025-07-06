@@ -1,7 +1,7 @@
 <a routerLink="" class="flex flex-col items-center gap-1" (click)="playAnimation()">
   <div class="flex -space-x-8 items-center">
     <div *ngFor="let letter of letters" class="relative h-20 w-20">
-      <img [src]="letter.default" [alt]="letter.alt" class="absolute h-20 w-20" #letterImg />
+      <img [src]="letter.format.replace('%s', letter.default)" [alt]="letter.alt" class="absolute h-20 w-20" #letterImg />
     </div>
   </div>
   <img src="svg/Name.svg" alt="Jonathan Neuser-Schmitz" class="w-64">

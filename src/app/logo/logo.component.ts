@@ -17,27 +17,12 @@ export class LogoComponent implements AfterViewInit {
   @ViewChildren('altImg') altImages!: QueryList<ElementRef>;
 
   letters = [
-    {default: 'svg/joscco_0.svg', alt: "J"},
-    {default: 'svg/joscco_1.svg', alt: "o"},
-    {default: 'svg/joscco_2.svg', alt: "s"},
-    {default: 'svg/joscco_3.svg', alt: "c"},
-    {default: 'svg/joscco_4.svg', alt: "c"},
-    {default: 'svg/joscco_5.svg', alt: "o"}
-  ];
-
-  globalAlternatives = [
-    'svg/joscco_0.svg',
-    'svg/joscco_1.svg',
-    'svg/joscco_2.svg',
-    'svg/joscco_3.svg',
-    'svg/joscco_4.svg',
-    'svg/joscco_5.svg',
-    'svg/joscco_0_1.svg',
-    'svg/joscco_1_1.svg',
-    'svg/joscco_2_1.svg',
-    'svg/joscco_2_2.svg',
-    'svg/joscco_4_1.svg',
-    'svg/joscco_5_1.svg'
+    {format: 'svg/joscco_0_%s.svg', default: '0', alt: "J", alternatives: ['1', '2', '3', '4', '5']},
+    {format: 'svg/joscco_1_%s.svg', default: '0', alt: "o", alternatives: ['1', '2', '3', '4', '5']},
+    {format: 'svg/joscco_2_%s.svg', default: '0', alt: "s", alternatives: ['1', '2', '3', '4', '5']},
+    {format: 'svg/joscco_3_%s.svg', default: '0', alt: "c", alternatives: ['1', '2', '3', '4', '5']},
+    {format: 'svg/joscco_4_%s.svg', default: '0', alt: "c", alternatives: ['1', '2', '3', '4', '5']},
+    {format: 'svg/joscco_5_%s.svg', default: '0', alt: "o", alternatives: ['1', '2', '3', '4', '5']}
   ];
 
   ngAfterViewInit() {
@@ -51,19 +36,20 @@ export class LogoComponent implements AfterViewInit {
     letterElements.forEach((letterElement, index) => {
       const delays = index * 0.1; // Slight delay for each letter
       const randomSwitches = 5; // Number of random switches per letter
+      const letter = this.letters[index];
 
-      for (let i = 0; i < randomSwitches; i++) {
-        const randomAlternative = this.globalAlternatives[Math.floor(Math.random() * this.globalAlternatives.length)];
+      this.shuffleArray(letter.alternatives).forEach((randomAlternative, i) => {
+        const src = letter.format.replace('%s', randomAlternative);
         gsap.to(letterElement.nativeElement, {
           scale: 0.9,
           delay: delays + i * 0.2,
           duration: 0.15,
           onComplete: () => {
-            letterElement.nativeElement.src = randomAlternative;
+            letterElement.nativeElement.src = src;
             gsap.to(letterElement.nativeElement, {scale: 1, duration: 0.15});
           }
         });
-      }
+      });
 
       // Return to default at the end
       gsap.to(letterElement.nativeElement, {
@@ -71,10 +57,19 @@ export class LogoComponent implements AfterViewInit {
         delay: delays + randomSwitches * 0.2,
         duration: 0.15,
         onComplete: () => {
-          letterElement.nativeElement.src = this.letters[index].default;
+          letterElement.nativeElement.src =  letter.format.replace('%s', letter.default);
           gsap.to(letterElement.nativeElement, {scale: 1, duration: 0.15});
         }
       });
     });
+  }
+
+  shuffleArray<T>(array: T[]): T[] {
+    const arr = array.slice();
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
   }
 }
