@@ -1,37 +1,13 @@
 <div
-  class="w-full h-[300px] flex flex-col-reverse"
-  #deskWrapper
+  class="w-full h-[300px] flex flex-col-reverse "
   (pointermove)="onPointerMove($event)"
   (pointerup)="onPointerUp()"
   (pointerleave)="onPointerUp()"
+  #deskWrapper
 >
-  <!-- Tischfläche -->
-  <div
-    class="relative bottom-0 left-1/2 -translate-x-1/2 h-[200px] bg-[#e4d6bc] z-0"
-    [style.width.px]="deskWidth"
-  >
-    <!-- Buttons -->
-    <div class="absolute right-4 bottom-[220px] flex flex-col w-16 gap-2 z-50 text-sm">
-      <button
-        (click)="toggleEditMode()"
-        class="bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700 transition"
-      >
-        {{ isEditMode ? 'Stop Edit' : 'Edit' }}
-      </button>
-
-      <button
-        (click)="resetPositions()"
-        class="bg-gray-300 text-black px-4 py-2 rounded shadow hover:bg-gray-400 transition"
-      >
-        Reset
-      </button>
-
-      <button (click)="logCurrentPositions()" class="px-4 py-2 bg-green-500 text-white rounded">
-        Log
-      </button>
-    </div>
-    <!-- Elemente -->
-    @for (item of items; track item.id; let i = $index) {
+  <div class="relative left-1/2 -translate-x-1/2" [style.width.px]="deskWidth">
+    <!-- Elemente Wand -->
+    @for (item of getWallItems(); track item.id; let i = $index) {
       <img #item
            [src]="'images/about/' + item.id + '.png'"
            [style.left.px]="getScreenX(item.x!)"
@@ -39,8 +15,64 @@
            [style.width.px]="item.width"
            class="absolute z-10 cursor-pointer select-none -translate-x-1/2 -translate-y-1/2"
            (pointerdown)="onPointerDown($event, item.id)"
+           (mouseenter)="showTooltip(item, $event)"
+           (mouseleave)="hideTooltip()"
+           (click)="cycleState($event, item)"
       />
     }
+    <!-- Tischfläche -->
+    <div
+      class="bottom-0 h-[200px] bg-[#e4d6bc] z-0"
+      #desk
+    >
+      <!-- Buttons -->
+      <div *ngIf="!isTouchUser" class="absolute right-4 bottom-[220px] flex flex-col w-16 gap-2 z-50 text-sm">
+        <button
+          (click)="toggleEditMode()"
+          class="bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700 transition"
+        >
+          {{ isEditMode ? 'Stop Edit' : 'Edit' }}
+        </button>
+
+        <button
+          (click)="resetPositions()"
+          class="bg-gray-300 text-black px-4 py-2 rounded shadow hover:bg-gray-400 transition"
+        >
+          Reset
+        </button>
+
+        <button (click)="logCurrentPositions()" class="px-4 py-2 bg-green-500 text-white rounded">
+          Log
+        </button>
+      </div>
+
+      <!-- Elemente Tisch -->
+      @for (item of getDeskItems(); track item.id; let i = $index) {
+        <img #item
+             [src]="'images/about/' + item.id + '.png'"
+             [style.left.px]="getScreenX(item.x!)"
+             [style.top.px]="item.y"
+             [style.width.px]="item.width"
+             class="absolute z-10 cursor-pointer select-none -translate-x-1/2 -translate-y-1/2"
+             (pointerdown)="onPointerDown($event, item.id)"
+             (mouseenter)="showTooltip(item, $event)"
+             (mouseleave)="hideTooltip()"
+             (click)="cycleState($event, item)"
+        />
+      }
+    </div>
+    <div
+      *ngIf="hoveredTooltip"
+      [id]="'tooltip-box'"
+      class="absolute pointer-events-none fixed z-50 px-3 py-1 text-sm rounded-lg text-white bg-black shadow"
+      style="transform-origin: top left"
+      [style.left.px]="getScreenX(hoveredTooltip.x)"
+      [style.top.px]="hoveredTooltip.y"
+    >
+      {{ hoveredTooltip.text }}
+    </div>
   </div>
 
 </div>
+
+
