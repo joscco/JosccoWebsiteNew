@@ -9,5 +9,5 @@ import { DeskSceneComponent} from './desk/desk.component';
   ]
 })
 export class AboutViewComponent{
-  @HostBinding('class') class = 'h-full';
+  @HostBinding('class') class = 'h-full flex flex-1';
 }

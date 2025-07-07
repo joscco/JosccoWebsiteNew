@@ -51,12 +51,12 @@ export class DeskSceneComponent implements OnInit, AfterViewInit, OnDestroy {
     {"id":"notebook","type":"table","intendedRelativeX":0,"y":-1,"width":250,"height":200,"x":0,"states":["notebook"],"currentStateIndex":0},
     {"id":"coffee","type":"table","intendedRelativeX":166,"y":8,"width":80,"x":166,"states":["coffee"],"currentStateIndex":0},
     {"id":"block","type":"table","intendedRelativeX":-232,"y":123,"width":100,"x":-232,"states":["block"],"currentStateIndex":0},
-    {"id":"pencils","type":"table","intendedRelativeX":-166,"y":-2,"width":50,"x":-166,"states":["pencils"],"currentStateIndex":0},
+    {"id":"pencils","type":"table","intendedRelativeX":-185,"y":-10,"x":-185,"width":150,"states":["pencils","llama","buddha","dino","treetrunks"],"currentStateIndex":4},
     {"id":"keyboard","type":"table","intendedRelativeX":255,"y":103,"width":200,"x":255,"states":["keyboard"],"currentStateIndex":0},
     {"id":"left_photo","type":"wall","intendedRelativeX":283,"y":-261,"width":100,"x":283,"states":["left_photo"],"currentStateIndex":0},
     {"id":"paper","type":"table","intendedRelativeX":-333,"y":59,"width":70,"x":-333,"states":["paper"],"currentStateIndex":0},
     {"id":"right_photo","type":"wall","intendedRelativeX":-287,"y":-199,"width":100,"x":-287,"states":["right_photo"],"currentStateIndex":0}
-  ].map(item => ({...item, states: [item.id], currentStateIndex: 0})) as DeskItem[];
+  ].map(item => ({...item, currentStateIndex: 0})) as DeskItem[];
 
   items: DeskItem[] = [];
   draggingId: string | null = null;
@@ -169,7 +169,6 @@ export class DeskSceneComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onPointerUp() {
     this.draggingId = null;
-    localStorage.setItem('desk-layout', JSON.stringify(this.items));
   }
 
   private getRealScreenX(intendedRelativeX: number): number {
@@ -200,7 +199,7 @@ export class DeskSceneComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getImageSrc(item: DeskItem): string {
-    const state = item.states?.[item.currentStateIndex ?? 0] ?? item.id;
+    const state = item.states?.[item.currentStateIndex!];
     return `images/about/${state}.png`;
   }
 

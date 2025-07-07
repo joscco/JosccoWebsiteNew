@@ -1,5 +1,5 @@
 <div
-  class="w-full h-[300px] flex flex-col-reverse "
+  class="w-full h-[300px] flex flex-col-reverse"
   (pointermove)="onPointerMove($event)"
   (pointerup)="onPointerUp()"
   (pointerleave)="onPointerUp()"
@@ -9,7 +9,7 @@
     <!-- Elemente Wand -->
     @for (item of getWallItems(); track item.id; let i = $index) {
       <img #item
-           [src]="'images/about/' + item.id + '.png'"
+           [src]="getImageSrc(item)"
            [style.left.px]="getScreenX(item.x!)"
            [style.top.px]="item.y"
            [style.width.px]="item.width"
@@ -49,7 +49,7 @@
       <!-- Elemente Tisch -->
       @for (item of getDeskItems(); track item.id; let i = $index) {
         <img #item
-             [src]="'images/about/' + item.id + '.png'"
+             [src]="getImageSrc(item)"
              [style.left.px]="getScreenX(item.x!)"
              [style.top.px]="item.y"
              [style.width.px]="item.width"
