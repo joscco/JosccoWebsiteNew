@@ -15,7 +15,7 @@
            [style.width.px]="item.width"
            class="absolute z-10 cursor-pointer select-none -translate-x-1/2 -translate-y-1/2"
            (pointerdown)="onPointerDown($event, item.id)"
-           (mouseenter)="showTooltip(item, $event)"
+           (mouseenter)="showTooltip(item)"
            (mouseleave)="hideTooltip()"
            (click)="cycleState($event, item)"
       />
@@ -55,7 +55,7 @@
              [style.width.px]="item.width"
              class="absolute z-10 cursor-pointer select-none -translate-x-1/2 -translate-y-1/2"
              (pointerdown)="onPointerDown($event, item.id)"
-             (mouseenter)="showTooltip(item, $event)"
+             (mouseenter)="showTooltip(item)"
              (mouseleave)="hideTooltip()"
              (click)="cycleState($event, item)"
         />

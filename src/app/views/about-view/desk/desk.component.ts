@@ -1,14 +1,14 @@
 import {
   AfterViewInit,
-  OnDestroy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   HostBinding,
+  OnDestroy,
   OnInit,
   QueryList,
   ViewChild,
-  ViewChildren,
-  ChangeDetectorRef, Renderer2
+  ViewChildren
 } from '@angular/core';
 import gsap from 'gsap';
 import {NgIf} from '@angular/common';
@@ -16,14 +16,16 @@ import {NgIf} from '@angular/common';
 export interface DeskItem {
   id: string;
   type: 'wall' | 'table';
-  intendedRelativeX: number;  // relativ zur Mitte: -100 bis +100 usw.
-  x?: number,
+  intendedRelativeX: number;
+  x?: number;
   y: number;
   height?: number;
   width: number;
   states?: string[];
   currentStateIndex?: number;
+  stateTooltips?: Record<string, string>; // NEU: Tooltip pro State
 }
+
 
 @Component({
   selector: 'app-desk-scene',
@@ -48,10 +50,33 @@ export class DeskSceneComponent implements OnInit, AfterViewInit, OnDestroy {
   tooltipTween?: gsap.core.Tween
 
   defaultItems: DeskItem[] = [
-    {"id":"notebook","type":"table","intendedRelativeX":0,"y":-1,"width":250,"height":200,"x":0,"states":["notebook"],"currentStateIndex":0},
-    {"id":"coffee","type":"table","intendedRelativeX":166,"y":8,"width":80,"x":166,"states":["coffee"],"currentStateIndex":0},
+    {
+      id: "notebook", type: "table", intendedRelativeX: 0, y: -1, width: 250, height: 200, x: 0,
+      states: ["notebook"],
+      stateTooltips: {
+        notebook: "Productivity, but make it cute."
+      }
+    },
+    {
+      id: "coffee", type: "table", intendedRelativeX: 166, y: 8, width: 80, x: 166,
+      states: ["coffee"],
+      stateTooltips: {
+        coffee: "Hydrate or die-drate."
+      }
+    },
+    {
+      id: "pencils", type: "table", intendedRelativeX: -185, y: -10, x: -185, width: 150,
+      states: ["pencils", "llama", "buddha", "dino", "treetrunks"],
+      currentStateIndex: 4,
+      stateTooltips: {
+        pencils: "Organized chaos. Emphasis on organized.",
+        llama: "No drama, just llama.",
+        buddha: "Inner peace in pastel.",
+        dino: "Roar means I love you in dinosaur.",
+        treetrunks: "Don't eat the apple pie!"
+      }
+    },
     {"id":"block","type":"table","intendedRelativeX":-232,"y":123,"width":100,"x":-232,"states":["block"],"currentStateIndex":0},
-    {"id":"pencils","type":"table","intendedRelativeX":-185,"y":-10,"x":-185,"width":150,"states":["pencils","llama","buddha","dino","treetrunks"],"currentStateIndex":4},
     {"id":"keyboard","type":"table","intendedRelativeX":255,"y":103,"width":200,"x":255,"states":["keyboard"],"currentStateIndex":0},
     {"id":"left_photo","type":"wall","intendedRelativeX":283,"y":-261,"width":100,"x":283,"states":["left_photo"],"currentStateIndex":0},
     {"id":"paper","type":"table","intendedRelativeX":-333,"y":59,"width":70,"x":-333,"states":["paper"],"currentStateIndex":0},
@@ -62,7 +87,7 @@ export class DeskSceneComponent implements OnInit, AfterViewInit, OnDestroy {
   draggingId: string | null = null;
   dragOffset = {x: 0, y: 0};
 
-  constructor(private cdr: ChangeDetectorRef, private renderer: Renderer2) {
+  constructor(private cdr: ChangeDetectorRef) {
   }
 
   ngOnInit() {
@@ -193,6 +218,7 @@ export class DeskSceneComponent implements OnInit, AfterViewInit, OnDestroy {
       {
         scale: 0.85, duration: 0.1, ease: 'power2.out', onComplete: () => {
           item.currentStateIndex = nextState;
+          this.showTooltip(item)
           gsap.to(el, {scale: 1, duration: 0.1, ease: 'power2.out'});
         }
       })
@@ -204,17 +230,11 @@ export class DeskSceneComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getTooltip(item: DeskItem): string {
-    return {
-      coffee: 'Hydrate or die-drate.',
-      notebook: 'Productivity, but make it cute.',
-      left_photo: 'Our dogs – always watching.',
-      right_photo: 'Where my mind goes when I need calm.',
-      pencils: 'Organized chaos. Emphasis on organized.',
-      block: 'By the power of Grayskull!',
-    }[item.id] || '';
+    const state = item.states?.[item.currentStateIndex ?? 0];
+    return item.stateTooltips?.[state ?? ''] ?? '';
   }
 
-  showTooltip(item: DeskItem, event: MouseEvent) {
+  showTooltip(item: DeskItem) {
     if (this.isTouchUser) return;
     const tooltipText = this.getTooltip(item);
     if (!tooltipText) return;
@@ -229,7 +249,7 @@ export class DeskSceneComponent implements OnInit, AfterViewInit, OnDestroy {
       this.tooltipTween = gsap.fromTo(
         el,
         {opacity: 0, scale: 0.9},
-        {opacity: 1, scale: 1, delay: 0.3, duration: 0.25, ease: 'power2.out'}
+        {opacity: 1, scale: 1, delay: 1, duration: 0.25, ease: 'power2.out'}
       );
     }
   }
@@ -241,7 +261,6 @@ export class DeskSceneComponent implements OnInit, AfterViewInit, OnDestroy {
       this.tooltipTween = gsap.to(el, {
         opacity: 0, scale: 0.9, duration: 0.2, ease: 'power2.in', onComplete: () => {
           this.hoveredTooltip = null;
-          this.cdr.detectChanges();
         }
       });
     } else {
