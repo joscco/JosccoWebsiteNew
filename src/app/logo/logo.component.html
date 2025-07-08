@@ -1,7 +1,9 @@
 <a routerLink="" class="flex flex-col items-center gap-1" (click)="playAnimation()">
   <div class="flex -space-x-8 items-center">
     <div *ngFor="let letter of letters" class="relative h-20 w-20">
-      <img [src]="getSrcString(letter)" [alt]="letter.alt" class="absolute h-20 w-20" #letterImg />
+      <svg class="icon absolute h-20 w-20">
+        <use [attr.xlink:href]="getSrcString(letter)" #letterImg></use>
+      </svg>
     </div>
   </div>
   <img src="svg/Name.svg" alt="Jonathan Neuser-Schmitz" class="w-64">

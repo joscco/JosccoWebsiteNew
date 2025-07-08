@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, QueryList, ViewChildren} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, ElementRef, QueryList, ViewChildren} from '@angular/core';
 import {RouterLink} from '@angular/router';
 import {NgForOf} from '@angular/common';
 import {gsap} from 'gsap';
@@ -26,12 +26,12 @@ export class LogoComponent implements AfterViewInit {
   private tweens: gsap.core.Tween[] = [];
 
   letters = [
-    {format: 'svg/joscco_0_%s.svg', default: '0', alt: "J", alternatives: ['1', '2', '3', '4', '5']},
-    {format: 'svg/joscco_1_%s.svg', default: '0', alt: "o", alternatives: ['1', '2', '3', '4', '5']},
-    {format: 'svg/joscco_2_%s.svg', default: '0', alt: "s", alternatives: ['1', '2', '3', '4', '5']},
-    {format: 'svg/joscco_3_%s.svg', default: '0', alt: "c", alternatives: ['1', '2', '3', '4', '5']},
-    {format: 'svg/joscco_4_%s.svg', default: '0', alt: "c", alternatives: ['1', '2', '3', '4', '5']},
-    {format: 'svg/joscco_5_%s.svg', default: '0', alt: "o", alternatives: ['1', '2', '3', '4', '5']}
+    {format: 'svg/letter_spritesheet.svg#joscco_0_%s', default: '0', alt: "J", alternatives: ['1', '2', '3', '4', '5']},
+    {format: 'svg/letter_spritesheet.svg#joscco_1_%s', default: '0', alt: "o", alternatives: ['1', '2', '3', '4', '5']},
+    {format: 'svg/letter_spritesheet.svg#joscco_2_%s', default: '0', alt: "s", alternatives: ['1', '2', '3', '4', '5']},
+    {format: 'svg/letter_spritesheet.svg#joscco_3_%s', default: '0', alt: "c", alternatives: ['1', '2', '3', '4', '5']},
+    {format: 'svg/letter_spritesheet.svg#joscco_4_%s', default: '0', alt: "c", alternatives: ['1', '2', '3', '4', '5']},
+    {format: 'svg/letter_spritesheet.svg#joscco_5_%s', default: '0', alt: "o", alternatives: ['1', '2', '3', '4', '5']}
   ];
 
   ngAfterViewInit() {
@@ -53,9 +53,11 @@ export class LogoComponent implements AfterViewInit {
         let tween = gsap.to(letterElement.nativeElement, {
           scale: 0.9,
           delay: delays + i * 0.2,
+          // This is needed to center the scaling transformation
+          transformOrigin: "50% 50%",
           duration: 0.15,
           onComplete: () => {
-            letterElement.nativeElement.src = src;
+            letterElement.nativeElement.setAttribute('xlink:href', src);
             gsap.to(letterElement.nativeElement, {scale: 1, duration: 0.15});
           }
         });
@@ -68,7 +70,8 @@ export class LogoComponent implements AfterViewInit {
         delay: delays + letter.alternatives.length * 0.2,
         duration: 0.15,
         onComplete: () => {
-          letterElement.nativeElement.src =  this.getSrcString(letter);
+          const src = this.getSrcString(letter)
+          letterElement.nativeElement.setAttribute('xlink:href', src);
           gsap.to(letterElement.nativeElement, {scale: 1, duration: 0.15});
         }
       });
