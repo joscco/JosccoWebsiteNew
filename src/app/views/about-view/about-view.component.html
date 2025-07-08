@@ -1,6 +1,6 @@
 <div class="w-full flex-1 flex flex-col items-center">
   <div class="w-full flex flex-col justify-between flex-1 items-center">
-    <div class="w-full max-w-[500px] text-center bg-white px-10 py-4">
+    <div class="w-full max-w-[500px] text-center bg-white px-10 pb-28">
       <div class="text-lg md:text-xl font-bold pb-2 px-4 select-none">About Me</div>
       <div class="text-base md:text-lg text-left font-semibold py-2 text-zinc-500 px-4 select-none">
         I'm a software developer employed in Nuremberg, Germany, living in Tönisvorst.
@@ -8,9 +8,83 @@
       </div>
       <div class="text-base md:text-lg text-left font-semibold py-2 text-zinc-500 px-4 select-none">
         Next to mathematics and software development, my interests include illustration, music, and game design.
-        Blending these fields into personal projects is one of my favorite things — right after time with my people and dogs.
+        Blending these fields into personal projects is one of my favorite things — right after time with my people and
+        dogs.
       </div>
     </div>
-    <app-desk-scene></app-desk-scene>
+    <div class="w-full h-full flex flex-col justify-end"
+      (pointermove)="onPointerMove($event)"
+      (pointerup)="onPointerUp()"
+      (pointerleave)="onPointerUp()"
+      #deskWrapper
+    >
+      <div class="relative left-1/2 -translate-x-1/2" [style.width.px]="deskWidth">
+        <!-- Elemente Wand -->
+        @for (item of getWallItems(); track item.id; let i = $index) {
+          <img #item
+               [src]="getImageSrc(item)"
+               [style.left.px]="getScreenX(item.x!)"
+               [style.top.px]="item.y"
+               [style.width.px]="item.width"
+               class="absolute z-10 cursor-pointer select-none -translate-x-1/2 -translate-y-1/2"
+               (pointerdown)="onPointerDown($event, item.id)"
+               (mouseenter)="showTooltip(item)"
+               (mouseleave)="hideTooltip()"
+               (click)="cycleState($event, item)"
+          />
+        }
+        <!-- Tischfläche -->
+        <div
+          class="bottom-0 h-[200px] bg-[#e4d6bc] z-0"
+          #desk
+        >
+          <!-- Buttons -->
+          <div *ngIf="!isTouchUser" class="absolute right-4 bottom-[220px] flex flex-col w-16 gap-2 z-50 text-sm">
+            <button
+              (click)="toggleEditMode()"
+              class="bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700 transition"
+            >
+              {{ isEditMode ? 'Stop Edit' : 'Edit' }}
+            </button>
+
+            <button
+              (click)="resetPositions()"
+              class="bg-gray-300 text-black px-4 py-2 rounded shadow hover:bg-gray-400 transition"
+            >
+              Reset
+            </button>
+
+            <button (click)="logCurrentPositions()" class="px-4 py-2 bg-green-500 text-white rounded">
+              Log
+            </button>
+          </div>
+
+          <!-- Elemente Tisch -->
+          @for (item of getDeskItems(); track item.id; let i = $index) {
+            <img #item
+                 [src]="getImageSrc(item)"
+                 [style.left.px]="getScreenX(item.x!)"
+                 [style.top.px]="item.y"
+                 [style.width.px]="item.width"
+                 class="absolute z-10 cursor-pointer select-none -translate-x-1/2 -translate-y-1/2"
+                 (pointerdown)="onPointerDown($event, item.id)"
+                 (mouseenter)="showTooltip(item)"
+                 (mouseleave)="hideTooltip()"
+                 (click)="cycleState($event, item)"
+            />
+          }
+        </div>
+        <div
+          *ngIf="hoveredTooltip"
+          [id]="'tooltip-box'"
+          class="absolute pointer-events-none fixed z-50 px-3 py-1 text-sm rounded-lg text-white bg-black shadow"
+          style="transform-origin: top left"
+          [style.left.px]="getScreenX(hoveredTooltip.x)"
+          [style.top.px]="hoveredTooltip.y"
+        >
+          {{ hoveredTooltip.text }}
+        </div>
+      </div>
+    </div>
   </div>
 </div>
