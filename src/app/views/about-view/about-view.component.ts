@@ -5,31 +5,26 @@ import gsap from 'gsap';
 interface DeskItem {
   id: string;
   type: 'wall' | 'table';
-  intendedRelativeX: number;
-  x?: number;
+  x: number;
   y: number;
-  height?: number;
-  width: number;
   states?: string[];
   currentStateIndex?: number;
-  stateTooltips?: Record<string, string>; // NEU: Tooltip pro State
+  stateTooltips?: Record<string, string>;
 }
 
 @Component({
   selector: 'app-about-view',
   templateUrl: './about-view.component.html',
-  imports: [
-    NgIf
-  ]
+  imports: [NgIf]
 })
 export class AboutViewComponent {
-  @HostBinding('class') class = 'h-full flex flex-1';
+  @HostBinding('class') class = 'h-full flex flex-col';
 
   @ViewChild('deskWrapper', {static: true}) deskWrapper!: ElementRef;
   @ViewChild('desk', {static: true}) desk!: ElementRef;
   @ViewChildren('item') itemRefs!: QueryList<ElementRef>;
 
-  maxDeskWidth = 1000; // Standardwert
+  maxDeskWidth = 1000;
   deskWidth = 0;
   isEditMode = false;
   isTouchUser = false;
@@ -38,37 +33,83 @@ export class AboutViewComponent {
   tooltipTween?: gsap.core.Tween
 
   defaultItems: DeskItem[] = [
+    // {
+    //   id: "notebook", type: "table", intendedRelativeX: 0, y: -1,, x: 0,
+    //   states: ["notebook"],
+    //   stateTooltips: {
+    //     notebook: "Productivity, but make it cute."
+    //   }
+    // },
+    // {
+    //   id: "coffee", type: "table", intendedRelativeX: 166, y: 8, x: 166,
+    //   states: ["coffee"],
+    //   stateTooltips: {
+    //     coffee: "Hydrate or die-drate."
+    //   }
+    // },
+    // {
+    //   id: "pencils", type: "table", intendedRelativeX: -185, y: -10, x: -185,
+    //   states: ["pencils", "llama", "buddha", "dino", "treetrunks"],
+    //   currentStateIndex: 4,
+    //   stateTooltips: {
+    //     pencils: "Organized chaos. Emphasis on organized.",
+    //     llama: "No drama, just llama.",
+    //     buddha: "Inner peace in pastel.",
+    //     dino: "Roar means I love you in dinosaur.",
+    //     treetrunks: "Don't eat the apple pie!"
+    //   }
+    // },
     {
-      id: "notebook", type: "table", intendedRelativeX: 0, y: -1, width: 250, height: 200, x: 0,
-      states: ["notebook"],
-      stateTooltips: {
-        notebook: "Productivity, but make it cute."
-      }
+      "id": "item",
+      "type": "table",
+      "y": -27,
+      "x": -156,
+      "states": ["item_0", "item_1", "item_2", "item_3"],
+      "currentStateIndex": 3
     },
     {
-      id: "coffee", type: "table", intendedRelativeX: 166, y: 8, width: 80, x: 166,
-      states: ["coffee"],
+      "id": "left_photo",
+      "type": "wall",
+      "y": -302,
+      "x": -255,
+      "states": ["photo_left_0"],
       stateTooltips: {
-        coffee: "Hydrate or die-drate."
-      }
+        photo_left_0: "My dogs."
+      },
+      "currentStateIndex": 0
     },
     {
-      id: "pencils", type: "table", intendedRelativeX: -185, y: -10, x: -185, width: 150,
-      states: ["pencils", "llama", "buddha", "dino", "treetrunks"],
-      currentStateIndex: 4,
-      stateTooltips: {
-        pencils: "Organized chaos. Emphasis on organized.",
-        llama: "No drama, just llama.",
-        buddha: "Inner peace in pastel.",
-        dino: "Roar means I love you in dinosaur.",
-        treetrunks: "Don't eat the apple pie!"
-      }
+      "id": "pencils",
+      "type": "table",
+      "y": 28,
+      "x": -261,
+      "states": ["pencils_0", "pencils_1"],
+      "currentStateIndex": 1
     },
-    {"id":"block","type":"table","intendedRelativeX":-232,"y":123,"width":100,"x":-232,"states":["block"],"currentStateIndex":0},
-    {"id":"keyboard","type":"table","intendedRelativeX":255,"y":103,"width":200,"x":255,"states":["keyboard"],"currentStateIndex":0},
-    {"id":"left_photo","type":"wall","intendedRelativeX":283,"y":-261,"width":100,"x":283,"states":["left_photo"],"currentStateIndex":0},
-    {"id":"paper","type":"table","intendedRelativeX":-333,"y":59,"width":70,"x":-333,"states":["paper"],"currentStateIndex":0},
-    {"id":"right_photo","type":"wall","intendedRelativeX":-287,"y":-199,"width":100,"x":-287,"states":["right_photo"],"currentStateIndex":0}
+    {
+      "id": "right_photo",
+      "type": "wall",
+      "y": -353,
+      "x": 272,
+      "states": ["photo_right_0"],
+      stateTooltips: {
+        photo_right_0: "My family."
+      },
+      "currentStateIndex": 0
+    },
+    {
+      "id": "coffee",
+      "type": "table",
+      "intendedRelativeX": 202,
+      "y": -30,
+      "x": 202,
+      "states": ["coffee_0", "coffee_1"],
+      stateTooltips: {
+        coffee_0: "Hydrate or die-drate.",
+        coffee_1: "Summer mode: Activated."
+      },
+      "currentStateIndex": 0
+    }
   ].map(item => ({...item, currentStateIndex: 0})) as DeskItem[];
 
   items: DeskItem[] = [];
@@ -86,25 +127,18 @@ export class AboutViewComponent {
 
   ngAfterViewInit() {
     this.resizeTableAndRepositionItems();
-
-    window.addEventListener('resize', () => {
-      this.resizeTableAndRepositionItems();
+    window.addEventListener('resize', () => this.resizeTableAndRepositionItems());
+    this.cdr.detectChanges();
+    gsap.fromTo(this.desk.nativeElement, {y: '100%', opacity: 0}, {
+      y: '0%',
+      opacity: 1,
+      duration: 1,
+      ease: 'power2.out'
     });
-
-    this.cdr.detectChanges()
-
-    gsap.fromTo(
-      this.desk.nativeElement,
-      {y: '100%', opacity: 0},
-      {y: '0%', opacity: 1, duration: 1, ease: 'power2.out'}
-    );
   }
 
   ngOnDestroy() {
-    gsap.to(
-      this.desk.nativeElement,
-      {y: '100%', opacity: 0, duration: 1, ease: 'power2.out'},
-    );
+    gsap.to(this.desk.nativeElement, {y: '100%', opacity: 0, duration: 1, ease: 'power2.out'});
   }
 
   toggleEditMode() {
@@ -130,62 +164,36 @@ export class AboutViewComponent {
   }
 
   resizeTableAndRepositionItems() {
-    this.deskWidth = Math.min(this.deskWrapper.nativeElement.offsetWidth, this.maxDeskWidth)
-
+    this.deskWidth = Math.min(this.deskWrapper.nativeElement.offsetWidth, this.maxDeskWidth);
     this.isCompact = window.innerWidth < 768;
-    if (this.isCompact) {
-      this.items = this.defaultItems.slice(0, 4);
-    } else {
-      this.items = this.defaultItems;
-    }
-    this.items = this.items.map(item => {
-      return {
-        ...item,
-        "x": this.getRealScreenX(item.intendedRelativeX)
-      }
-    })
-    this.cdr.detectChanges()
+    this.items = this.isCompact ? this.defaultItems.slice(0, 4) : [...this.defaultItems];
+    this.cdr.detectChanges();
   }
 
   onPointerDown(event: PointerEvent, itemId: string) {
-    if (!this.isEditMode) return;
-    if (this.isTouchUser) return;
-
+    if (!this.isEditMode || this.isTouchUser) return;
     this.draggingId = itemId;
     const item = this.items.find(i => i.id === itemId);
     if (!item) return;
-
-    this.dragOffset.x = event.clientX - this.getScreenX(item.intendedRelativeX);
+    this.dragOffset.x = event.clientX - this.getScreenX(item.x);
     this.dragOffset.y = event.clientY - item.y;
-
     event.preventDefault();
   }
 
   onPointerMove(event: PointerEvent) {
-    if (!this.draggingId) return;
-    if (!this.isEditMode) return;
-    if (this.isTouchUser) return;
-
+    if (!this.draggingId || !this.isEditMode || this.isTouchUser) return;
     const item = this.items.find(i => i.id === this.draggingId);
     if (!item) return;
-
     const newScreenX = event.clientX - this.dragOffset.x;
     const newRelX = this.getRelativeX(newScreenX);
     const newY = event.clientY - this.dragOffset.y;
-
-    item.intendedRelativeX = Math.round(newRelX);
-    item.x = this.getRealScreenX(item.intendedRelativeX);
+    item.x = Math.round(newRelX)
     item.y = Math.round(newY);
-
     event.preventDefault();
   }
 
   onPointerUp() {
     this.draggingId = null;
-  }
-
-  private getRealScreenX(intendedRelativeX: number): number {
-    return Math.min(Math.max(intendedRelativeX, -this.deskWidth / 2), this.deskWidth / 2)
   }
 
   getDeskItems() {
@@ -198,23 +206,20 @@ export class AboutViewComponent {
 
   cycleState(event: MouseEvent, item: DeskItem) {
     if (!item.states) return;
-
     let nextState = (item.currentStateIndex! + 1) % item.states.length;
     const el = event.target as HTMLElement;
-    gsap.fromTo(el,
-      {scale: 1},
-      {
-        scale: 0.85, duration: 0.1, ease: 'power2.out', onComplete: () => {
-          item.currentStateIndex = nextState;
-          this.showTooltip(item)
-          gsap.to(el, {scale: 1, duration: 0.1, ease: 'power2.out'});
-        }
-      })
+    gsap.fromTo(el, {scale: 1}, {
+      scale: 0.85, duration: 0.1, ease: 'power2.out', onComplete: () => {
+        item.currentStateIndex = nextState;
+        this.showTooltip(item);
+        gsap.to(el, {scale: 1, duration: 0.1, ease: 'power2.out'});
+      }
+    });
   }
 
   getImageSrc(item: DeskItem): string {
     const state = item.states?.[item.currentStateIndex!];
-    return `images/about/${state}.png`;
+    return `svg/about/${state}.svg`;
   }
 
   getTooltip(item: DeskItem): string {
@@ -226,26 +231,27 @@ export class AboutViewComponent {
     if (this.isTouchUser) return;
     const tooltipText = this.getTooltip(item);
     if (!tooltipText) return;
-    const x = this.getRealScreenX(item.intendedRelativeX);
-    const y = item.y - (item.height ?? 0) / 2 + 20;
+    const x = item.x;
+    const y = item.y + 20;
     this.hoveredTooltip = {id: item.id, x, y, text: tooltipText};
     this.cdr.detectChanges();
-
     const el = document.getElementById('tooltip-box');
     if (el) {
-      this.tooltipTween?.kill()
-      this.tooltipTween = gsap.fromTo(
-        el,
-        {opacity: 0, scale: 0.9},
-        {opacity: 1, scale: 1, delay: 1, duration: 0.25, ease: 'power2.out'}
-      );
+      this.tooltipTween?.kill();
+      this.tooltipTween = gsap.fromTo(el, {opacity: 0, scale: 0.9}, {
+        opacity: 1,
+        scale: 1,
+        delay: 1,
+        duration: 0.25,
+        ease: 'power2.out'
+      });
     }
   }
 
   hideTooltip() {
     const el = document.getElementById('tooltip-box');
     if (el) {
-      this.tooltipTween?.kill()
+      this.tooltipTween?.kill();
       this.tooltipTween = gsap.to(el, {
         opacity: 0, scale: 0.9, duration: 0.2, ease: 'power2.in', onComplete: () => {
           this.hoveredTooltip = null;
