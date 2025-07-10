@@ -26,10 +26,10 @@
                [src]="getImageSrc(item)"
                [style.left.px]="getScreenX(item.x!)"
                [style.top.px]="item.y"
-               class="absolute z-10 cursor-pointer select-none -translate-x-1/2 -translate-y-1/2"
+               class="absolute z-10 cursor-pointer select-none -translate-x-1/2"
                (pointerdown)="onPointerDown($event, item.id)"
-               (mouseenter)="showTooltip(item, $event)"
-               (mouseleave)="hideTooltip()"
+               (mouseenter)="focus(item, $event)"
+               (mouseleave)="unfocus()"
                (click)="cycleState($event, item)"
           />
         }
@@ -39,7 +39,7 @@
           #desk
         >
           <img src="svg/about/divider.svg"
-               class="absolute w-full pointer-events-none"
+               class="absolute left-1/2 -translate-x-1/2 w-[850px] pointer-events-none"
                alt="divider">
           <!-- Buttons -->
           <div *ngIf="!isTouchUser" class="absolute right-4 bottom-[220px] flex flex-col w-16 gap-2 z-50 text-sm">
@@ -48,13 +48,6 @@
               class="bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700 transition"
             >
               {{ isEditMode ? 'Stop Edit' : 'Edit' }}
-            </button>
-
-            <button
-              (click)="resetPositions()"
-              class="bg-gray-300 text-black px-4 py-2 rounded shadow hover:bg-gray-400 transition"
-            >
-              Reset
             </button>
 
             <button (click)="logCurrentPositions()" class="px-4 py-2 bg-green-500 text-white rounded">
@@ -68,10 +61,10 @@
                  [src]="getImageSrc(item)"
                  [style.left.px]="getScreenX(item.x!)"
                  [style.top.px]="item.y"
-                 class="absolute z-10 cursor-pointer select-none -translate-x-1/2 -translate-y-1/2"
+                 class="absolute z-10 cursor-pointer select-none -translate-x-1/2"
                  (pointerdown)="onPointerDown($event, item.id)"
-                 (mouseenter)="showTooltip(item, $event)"
-                 (mouseleave)="hideTooltip()"
+                 (mouseenter)="focus(item, $event)"
+                 (mouseleave)="unfocus()"
                  (click)="cycleState($event, item)"
             />
           }
@@ -79,13 +72,14 @@
         <div
           *ngIf="hoveredTooltip"
           [id]="'tooltip-box'"
-          class="absolute pointer-events-none fixed z-50 px-3 py-1 text-sm rounded-lg text-white bg-black shadow"
-          style="transform-origin: top left"
+          class="absolute pointer-events-none -translate-x-1/2 z-50 px-3 py-1 text-sm rounded-lg text-white bg-black shadow"
           [style.left.px]="getScreenX(hoveredTooltip.x)"
           [style.top.px]="hoveredTooltip.y"
         >
-          {{ hoveredTooltip.text }}
-        </div>
+          {{hoveredTooltip.text}}
+          <span
+            class="absolute left-1/2 -translate-x-1/2 -bottom-2 w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent border-t-8 border-t-black"
+          ></span>
       </div>
     </div>
   </div>

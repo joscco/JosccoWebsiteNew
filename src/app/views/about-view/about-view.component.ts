@@ -11,13 +11,16 @@ import {
 } from '@angular/core';
 import {NgIf} from '@angular/common';
 import gsap from 'gsap';
+import {AboutItems} from './about-items';
 
-interface DeskItem {
+export interface DeskItem {
   id: string;
   type: string;
   x: number;
   y: number;
+  topOffsetsTooltip: Record<string, number>;
   states?: string[];
+  showOnSmallScreen: boolean;
   stateTooltips?: Record<string, string>;
   currentStateIndex?: number;
 }
@@ -41,72 +44,9 @@ export class AboutViewComponent implements OnInit, AfterViewInit {
   isCompact = false;
   hoveredTooltip: { id: string, x: number, y: number, text: string } | null = null;
   tooltipTween?: gsap.core.Tween
+  itemTweens: gsap.core.Tween[] = [];
 
-  defaultItems: DeskItem[] = [
-    {
-      "id": "notebook",
-      "type": "table",
-      "y": 42,
-      "x": 0,
-      "states": ["notebook_on", "notebook_off"],
-      "stateTooltips": {"notebook_on": "Productivity, but make it cute.", "notebook_off": "Battery low again."} as Record<string, string>,
-      "currentStateIndex": 1
-    },
-    {
-      "id": "item",
-      "type": "table",
-      "y": -7,
-      "x": -171,
-      "states": ["dino", "lama", "buddha", "treetrunks"],
-      "stateTooltips": {
-        "dino": "Roar means I love you in dinosaur.",
-        "lama": "No drama, just llama.",
-        "buddha": "Ommmm.",
-        "treetrunks": "Have you tried my apple pie?"
-      },
-      "currentStateIndex": 0
-    },
-    {
-      "id": "left_photo",
-      "type": "wall",
-      "y": -302,
-      "x": -255,
-      "states": ["shiba_photo"],
-      "stateTooltips": {"shiba_photo": "My dogs - always watching."},
-      "currentStateIndex": 0
-    },
-    {
-      "id": "pencils",
-      "type": "table",
-      "y": 49,
-      "x": -259,
-      "states": ["pencils", "vase", "paper_garbage"],
-      "stateTooltips": {
-        "pencils": "Organized chaos. Emphasis on organized.",
-        "vase": "A vase for all the flowers I don't have.",
-        "paper_garbage": "The paper is not garbage, it's art."
-      },
-      "currentStateIndex": 0
-    },
-    {
-      "id": "right_photo",
-      "type": "wall",
-      "y": -353,
-      "x": 272,
-      "states": ["family"],
-      "stateTooltips": {"family": "My family."},
-      "currentStateIndex": 0
-    },
-    {
-      "id": "coffee",
-      "type": "table",
-      "y": 12,
-      "x": 157,
-      "states": ["coffee", "iced_coffee"],
-      "stateTooltips": {"coffee": "Hydrate or die-drate.", "iced_coffee": "Summer mode: Activated."},
-      "currentStateIndex": 1
-    }
-  ].map(item => ({...item, currentStateIndex: 0}));
+  defaultItems: DeskItem[] = AboutItems.map(item => ({...item, currentStateIndex: 0}));
 
   items: DeskItem[] = [];
   draggingId: string | null = null;
@@ -131,11 +71,6 @@ export class AboutViewComponent implements OnInit, AfterViewInit {
     this.isEditMode = !this.isEditMode;
   }
 
-  resetPositions() {
-    this.items = [...this.defaultItems];
-    this.cdr.detectChanges();
-  }
-
   logCurrentPositions() {
     const formatted = '[\n' + this.items.map(item => `  ${JSON.stringify(item)}`).join(', \n') + '\n]';
     console.log(formatted);
@@ -152,7 +87,7 @@ export class AboutViewComponent implements OnInit, AfterViewInit {
   resizeTableAndRepositionItems() {
     this.deskWidth = Math.min(this.deskWrapper.nativeElement.offsetWidth, this.maxDeskWidth);
     this.isCompact = window.innerWidth < 768;
-    this.items = this.isCompact ? this.defaultItems.slice(0, 4) : [...this.defaultItems];
+    this.items = this.isCompact ? this.defaultItems.filter(item => item.showOnSmallScreen) : [...this.defaultItems];
     this.cdr.detectChanges();
   }
 
@@ -197,7 +132,7 @@ export class AboutViewComponent implements OnInit, AfterViewInit {
     gsap.fromTo(el, {scale: 1}, {
       scale: 0.85, duration: 0.1, ease: 'power2.out', onComplete: () => {
         item.currentStateIndex = nextState;
-        this.showTooltip(item, event);
+        this.focus(item, event);
         gsap.to(el, {scale: 1, duration: 0.1, ease: 'power2.out'});
       }
     });
@@ -213,12 +148,18 @@ export class AboutViewComponent implements OnInit, AfterViewInit {
     return item.stateTooltips?.[state ?? ''] ?? '';
   }
 
-  showTooltip(item: DeskItem, event: MouseEvent) {
+  focus(item: DeskItem, event: MouseEvent) {
     if (this.isTouchUser) return;
+    this.showTooltip(item);
+    this.rescaleItems();
+    this.scaleItem(item, event);
+  }
+
+  showTooltip(item: DeskItem) {
     const tooltipText = this.getTooltip(item);
     if (!tooltipText) return;
-    const x = item.x;
-    const y = item.y + 50;
+    const x = item.x
+    const y = item.y - this.getTooltipOffset(item);
     this.hoveredTooltip = {id: item.id, x, y, text: tooltipText};
     this.cdr.detectChanges();
     const el = document.getElementById('tooltip-box');
@@ -227,7 +168,7 @@ export class AboutViewComponent implements OnInit, AfterViewInit {
       this.tooltipTween = gsap.fromTo(el, {opacity: 0, scale: 0.9}, {
         opacity: 1,
         scale: 1,
-        delay: 1,
+        delay: 0.3,
         duration: 0.25,
         ease: 'power2.out'
       });
@@ -246,5 +187,42 @@ export class AboutViewComponent implements OnInit, AfterViewInit {
     } else {
       this.hoveredTooltip = null;
     }
+  }
+
+  unfocus() {
+    this.hideTooltip();
+    this.rescaleItems();
+  }
+
+  private rescaleItems() {
+    this.itemTweens.forEach(tween => tween.kill());
+    this.itemTweens = [];
+    this.itemRefs.forEach(ref => {
+      const el = ref.nativeElement;
+      this.itemTweens.push(gsap.to(el, {scale: 1, duration: 0.2, ease: 'power2.out'}));
+    });
+  }
+
+  private scaleItem(item: DeskItem, event: MouseEvent) {
+    const el = event.target as HTMLElement;
+    // Kill and remove any existing tween for this item
+    this.itemTweens = this.itemTweens.filter(tween => {
+      if (tween.targets().includes(el)) {
+        tween.kill();
+        return false; // Remove this tween
+      }
+      return true; // Keep other tweens
+    });
+    if (el) {
+      this.itemTweens.push(gsap.to(el, {
+        scale: 1.05,
+        duration: 0.2,
+        ease: 'power2.out'
+      }));
+    }
+  }
+
+  private getTooltipOffset(item: DeskItem) {
+    return item.topOffsetsTooltip[item.states?.[item.currentStateIndex ?? 0] ?? ''] || 0
   }
 }
