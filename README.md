@@ -1,1 +1,1 @@
-Deployed on: https://joscco.github.io/JosccoWebsiteNew
+Deployed on: [joscco.com](https://joscco.com)
