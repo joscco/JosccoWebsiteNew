@@ -1,4 +1,14 @@
-import {ChangeDetectorRef, Component, ElementRef, HostBinding, QueryList, ViewChild, ViewChildren} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  HostBinding,
+  OnInit,
+  QueryList,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
 import {NgIf} from '@angular/common';
 import gsap from 'gsap';
 
@@ -17,7 +27,7 @@ interface DeskItem {
   templateUrl: './about-view.component.html',
   imports: [NgIf]
 })
-export class AboutViewComponent {
+export class AboutViewComponent implements OnInit, AfterViewInit {
   @HostBinding('class') class = 'h-full flex flex-col';
 
   @ViewChild('deskWrapper', {static: true}) deskWrapper!: ElementRef;
@@ -115,16 +125,6 @@ export class AboutViewComponent {
     this.resizeTableAndRepositionItems();
     window.addEventListener('resize', () => this.resizeTableAndRepositionItems());
     this.cdr.detectChanges();
-    gsap.fromTo(this.desk.nativeElement, {y: '100%', opacity: 0}, {
-      y: '0%',
-      opacity: 1,
-      duration: 1,
-      ease: 'power2.out'
-    });
-  }
-
-  ngOnDestroy() {
-    gsap.to(this.desk.nativeElement, {y: '100%', opacity: 0, duration: 1, ease: 'power2.out'});
   }
 
   toggleEditMode() {
