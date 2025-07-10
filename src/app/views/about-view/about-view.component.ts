@@ -163,7 +163,7 @@ export class AboutViewComponent implements OnInit, AfterViewInit {
     this.tooltipTween?.kill();
     this.tooltipTween = gsap.to(el, {
       opacity: 0,
-      scale: 0,
+      scale: 0.9,
       duration: 0.1,
       ease: 'power2.out',
       onComplete: () => {
@@ -175,7 +175,7 @@ export class AboutViewComponent implements OnInit, AfterViewInit {
           this.tooltipTween = gsap.fromTo(el, {opacity: 0, scale: 0.9}, {
             opacity: 1,
             scale: 1,
-            delay: 0.3,
+            delay: 0.1,
             duration: 0.25,
             ease: 'power2.out'
           });
@@ -189,9 +189,7 @@ export class AboutViewComponent implements OnInit, AfterViewInit {
     if (el) {
       this.tooltipTween?.kill();
       this.tooltipTween = gsap.to(el, {
-        opacity: 0, scale: 0.9, duration: 0.2, ease: 'power2.in', onComplete: () => {
-          this.hoveredTooltip = null;
-        }
+        opacity: 0, scale: 0.9, duration: 0.2, ease: 'power2.in'
       });
     } else {
       this.hoveredTooltip = null;

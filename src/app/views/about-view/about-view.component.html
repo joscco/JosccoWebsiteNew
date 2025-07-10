@@ -30,12 +30,9 @@
                alt="divider">
           <!-- Buttons -->
           <div *ngIf="!isTouchUser" class="absolute right-28 bottom-[200px] flex flex-col w-16 gap-2 z-50 text-sm">
-            <button
-              (click)="toggleEditMode()"
-              class="bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700 transition"
-            >
-              {{ isEditMode ? 'Stop Edit' : 'Edit' }}
-            </button>
+              <img (click)="toggleEditMode()" [src]="isEditMode ? 'svg/about/lock.svg' : 'svg/about/move.svg'"
+                   class="inline-block w-16 h-16 hover:scale-110 transition-all duration-200"
+                   alt="Edit Icon">
           </div>
 
           @for (item of items; track item.id; let i = $index) {

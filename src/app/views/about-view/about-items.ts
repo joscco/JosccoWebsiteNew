@@ -4,8 +4,8 @@ export const AboutItems: DeskItem[] = [
   {
     "id": "notebook",
     "type": "table",
-    "y": -84,
-    "x": 7,
+    "y": -85,
+    "x": 0,
     "showOnSmallScreen": true,
     "topOffsetsTooltip": {
       "notebook_on": 20,
@@ -25,7 +25,7 @@ export const AboutItems: DeskItem[] = [
     "id": "item",
     "type": "table",
     "y": -102,
-    "x": -157,
+    "x": 140,
     "showOnSmallScreen": true,
     "topOffsetsTooltip": {
       "dino": -20,
@@ -69,7 +69,7 @@ export const AboutItems: DeskItem[] = [
     "type": "table",
     "y": -64,
     "x": -254,
-    "showOnSmallScreen": true,
+    "showOnSmallScreen": false,
     "topOffsetsTooltip": {
       "pencils": -20,
       "vase": 10,
@@ -107,12 +107,12 @@ export const AboutItems: DeskItem[] = [
   {
     "id": "coffee",
     "type": "table",
-    "y": -110,
-    "x": 161,
+    "y": -100,
+    "x": -140,
     "showOnSmallScreen": true,
     "topOffsetsTooltip": {
       "coffee": -50,
-      "iced_coffee": -30
+      "iced_coffee": -10
     },
     "states": [
       "coffee",
