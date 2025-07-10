@@ -14,10 +14,10 @@
       </div>
     </div>
     <div class="w-full h-full flex flex-col justify-end"
-      (pointermove)="onPointerMove($event)"
-      (pointerup)="onPointerUp()"
-      (pointerleave)="onPointerUp()"
-      #deskWrapper
+         (pointermove)="onPointerMove($event)"
+         (pointerup)="onPointerUp()"
+         (pointerleave)="onPointerUp()"
+         #deskWrapper
     >
       <div class="relative left-1/2 -translate-x-1/2" [style.width.px]="deskWidth">
         <!-- Elemente Wand -->
@@ -35,9 +35,12 @@
         }
         <!-- Tischfläche -->
         <div
-          class="bottom-0 h-[200px] bg-[#e4d6bc] z-0"
+          class="bottom-0 h-[200px] z-0"
           #desk
         >
+          <img src="svg/about/divider.svg"
+               class="absolute w-full pointer-events-none"
+               alt="divider">
           <!-- Buttons -->
           <div *ngIf="!isTouchUser" class="absolute right-4 bottom-[220px] flex flex-col w-16 gap-2 z-50 text-sm">
             <button

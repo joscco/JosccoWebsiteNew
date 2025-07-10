@@ -34,71 +34,67 @@ export class AboutViewComponent {
 
   defaultItems: DeskItem[] = [
     {
-      id: "notebook",
-      type: "table",
-      y: -1,
-      x: 0,
-      states: ["notebook_on", "notebook_off"],
-      stateTooltips: {
-        "notebook_on": "Productivity, but make it cute.",
-        "notebook_off": "Battery low again."
-      } as Record<string, string>
+      "id": "notebook",
+      "type": "table",
+      "y": 42,
+      "x": 0,
+      "states": ["notebook_on", "notebook_off"],
+      "stateTooltips": {"notebook_on": "Productivity, but make it cute.", "notebook_off": "Battery low again."} as Record<string, string>,
+      "currentStateIndex": 1
     },
     {
-      id: "item",
-      type: "table",
-      y: -27,
-      x: -156,
-      states: ["dino", "lama", "buddha", "treetrunks"],
-      stateTooltips: {
+      "id": "item",
+      "type": "table",
+      "y": -7,
+      "x": -171,
+      "states": ["dino", "lama", "buddha", "treetrunks"],
+      "stateTooltips": {
         "dino": "Roar means I love you in dinosaur.",
         "lama": "No drama, just llama.",
         "buddha": "Ommmm.",
         "treetrunks": "Have you tried my apple pie?"
-      }
+      },
+      "currentStateIndex": 0
     },
     {
-      id: "left_photo",
-      type: "wall",
-      y: -302,
-      x: -255,
-      states: ["shiba_photo"],
-      stateTooltips: {
-        shiba_photo: "My dogs."
-      }
+      "id": "left_photo",
+      "type": "wall",
+      "y": -302,
+      "x": -255,
+      "states": ["shiba_photo"],
+      "stateTooltips": {"shiba_photo": "My dogs - always watching."},
+      "currentStateIndex": 0
     },
     {
-      id: "pencils",
-      type: "table",
-      y: 28,
-      x: -261,
-      states: ["pencils", "vase", "paper_garbage"],
-      stateTooltips: {
-        pencils: "Organized chaos. Emphasis on organized.",
-        vase: "A vase for all the flowers I don't have.",
-        paper_garbage: "The paper is not garbage, it's art."
-      }
+      "id": "pencils",
+      "type": "table",
+      "y": 49,
+      "x": -259,
+      "states": ["pencils", "vase", "paper_garbage"],
+      "stateTooltips": {
+        "pencils": "Organized chaos. Emphasis on organized.",
+        "vase": "A vase for all the flowers I don't have.",
+        "paper_garbage": "The paper is not garbage, it's art."
+      },
+      "currentStateIndex": 0
     },
     {
-      id: "right_photo",
-      type: "wall",
-      y: -353,
-      x: 272,
-      states: ["family"],
-      stateTooltips: {
-        family: "My family."
-      }
+      "id": "right_photo",
+      "type": "wall",
+      "y": -353,
+      "x": 272,
+      "states": ["family"],
+      "stateTooltips": {"family": "My family."},
+      "currentStateIndex": 0
     },
     {
-      id: "coffee",
-      type: "table",
-      y: -30,
-      x: 202,
-      states: ["coffee", "iced_coffee"],
-      stateTooltips: {
-        coffee: "Hydrate or die-drate.",
-        iced_coffee: "Summer mode: Activated."
-      }
+      "id": "coffee",
+      "type": "table",
+      "y": 12,
+      "x": 157,
+      "states": ["coffee", "iced_coffee"],
+      "stateTooltips": {"coffee": "Hydrate or die-drate.", "iced_coffee": "Summer mode: Activated."},
+      "currentStateIndex": 1
     }
   ].map(item => ({...item, currentStateIndex: 0}));
 
