@@ -76,11 +76,6 @@ export class AboutViewComponent implements OnInit, AfterViewInit {
     }
   }
 
-  logCurrentPositions() {
-    const formatted = '[\n' + this.items.map(item => `  ${JSON.stringify(item)}`).join(', \n') + '\n]';
-    console.log(formatted);
-  }
-
   getScreenX(relX: number): number {
     return this.deskWidth / 2 + relX;
   }
@@ -141,11 +136,6 @@ export class AboutViewComponent implements OnInit, AfterViewInit {
     return `svg/about/${state}.svg`;
   }
 
-  getTooltip(item: DeskItem): string {
-    const state = item.states?.[item.currentStateIndex ?? 0];
-    return item.stateTooltips?.[state ?? ''] ?? '';
-  }
-
   focus(item: DeskItem, event: MouseEvent) {
     if (this.isTouchUser) return;
     if (this.isEditMode) return;
@@ -161,24 +151,37 @@ export class AboutViewComponent implements OnInit, AfterViewInit {
     this.rescaleItems();
   }
 
+  getTooltip(item: DeskItem): string {
+    const state = item.states?.[item.currentStateIndex ?? 0];
+    return item.stateTooltips?.[state ?? ''] ?? '';
+  }
+
   showTooltip(item: DeskItem) {
     const tooltipText = this.getTooltip(item);
     if (!tooltipText) return;
-    const x = item.x
-    const y = item.y - this.getTooltipOffset(item);
-    this.hoveredTooltip = {id: item.id, x, y, text: tooltipText};
-    this.cdr.detectChanges();
     const el = document.getElementById('tooltip-box');
-    if (el) {
-      this.tooltipTween?.kill();
-      this.tooltipTween = gsap.fromTo(el, {opacity: 0, scale: 0.9}, {
-        opacity: 1,
-        scale: 1,
-        delay: 0.3,
-        duration: 0.25,
-        ease: 'power2.out'
-      });
-    }
+    this.tooltipTween?.kill();
+    this.tooltipTween = gsap.to(el, {
+      opacity: 0,
+      scale: 0,
+      duration: 0.1,
+      ease: 'power2.out',
+      onComplete: () => {
+        const x = item.x
+        const y = item.y - this.getTooltipOffset(item);
+        this.hoveredTooltip = {id: item.id, x, y, text: tooltipText};
+        this.cdr.detectChanges();
+        if (el) {
+          this.tooltipTween = gsap.fromTo(el, {opacity: 0, scale: 0.9}, {
+            opacity: 1,
+            scale: 1,
+            delay: 0.3,
+            duration: 0.25,
+            ease: 'power2.out'
+          });
+        }
+      }
+    })
   }
 
   hideTooltip() {
