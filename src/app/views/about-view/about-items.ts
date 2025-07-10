@@ -16,7 +16,7 @@ export const AboutItems: DeskItem[] = [
       "notebook_off"
     ],
     "stateTooltips": {
-      "notebook_on": "Productivity, but make it cute.",
+      "notebook_on": "Work work work work.",
       "notebook_off": "Battery low again."
     },
     "currentStateIndex": 0
