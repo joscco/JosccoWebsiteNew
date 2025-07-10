@@ -28,7 +28,7 @@
                [style.top.px]="item.y"
                class="absolute z-10 cursor-pointer select-none -translate-x-1/2 -translate-y-1/2"
                (pointerdown)="onPointerDown($event, item.id)"
-               (mouseenter)="showTooltip(item)"
+               (mouseenter)="showTooltip(item, $event)"
                (mouseleave)="hideTooltip()"
                (click)="cycleState($event, item)"
           />
@@ -67,7 +67,7 @@
                  [style.top.px]="item.y"
                  class="absolute z-10 cursor-pointer select-none -translate-x-1/2 -translate-y-1/2"
                  (pointerdown)="onPointerDown($event, item.id)"
-                 (mouseenter)="showTooltip(item)"
+                 (mouseenter)="showTooltip(item, $event)"
                  (mouseleave)="hideTooltip()"
                  (click)="cycleState($event, item)"
             />

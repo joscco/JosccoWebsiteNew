@@ -4,12 +4,12 @@ import gsap from 'gsap';
 
 interface DeskItem {
   id: string;
-  type: 'wall' | 'table';
+  type: string;
   x: number;
   y: number;
   states?: string[];
-  currentStateIndex?: number;
   stateTooltips?: Record<string, string>;
+  currentStateIndex?: number;
 }
 
 @Component({
@@ -33,84 +33,74 @@ export class AboutViewComponent {
   tooltipTween?: gsap.core.Tween
 
   defaultItems: DeskItem[] = [
-    // {
-    //   id: "notebook", type: "table", intendedRelativeX: 0, y: -1,, x: 0,
-    //   states: ["notebook"],
-    //   stateTooltips: {
-    //     notebook: "Productivity, but make it cute."
-    //   }
-    // },
-    // {
-    //   id: "coffee", type: "table", intendedRelativeX: 166, y: 8, x: 166,
-    //   states: ["coffee"],
-    //   stateTooltips: {
-    //     coffee: "Hydrate or die-drate."
-    //   }
-    // },
-    // {
-    //   id: "pencils", type: "table", intendedRelativeX: -185, y: -10, x: -185,
-    //   states: ["pencils", "llama", "buddha", "dino", "treetrunks"],
-    //   currentStateIndex: 4,
-    //   stateTooltips: {
-    //     pencils: "Organized chaos. Emphasis on organized.",
-    //     llama: "No drama, just llama.",
-    //     buddha: "Inner peace in pastel.",
-    //     dino: "Roar means I love you in dinosaur.",
-    //     treetrunks: "Don't eat the apple pie!"
-    //   }
-    // },
     {
-      "id": "item",
-      "type": "table",
-      "y": -27,
-      "x": -156,
-      "states": ["item_0", "item_1", "item_2", "item_3"],
-      "currentStateIndex": 3
-    },
-    {
-      "id": "left_photo",
-      "type": "wall",
-      "y": -302,
-      "x": -255,
-      "states": ["photo_left_0"],
+      id: "notebook",
+      type: "table",
+      y: -1,
+      x: 0,
+      states: ["notebook_on", "notebook_off"],
       stateTooltips: {
-        photo_left_0: "My dogs."
-      },
-      "currentStateIndex": 0
+        "notebook_on": "Productivity, but make it cute.",
+        "notebook_off": "Battery low again."
+      } as Record<string, string>
     },
     {
-      "id": "pencils",
-      "type": "table",
-      "y": 28,
-      "x": -261,
-      "states": ["pencils_0", "pencils_1"],
-      "currentStateIndex": 1
-    },
-    {
-      "id": "right_photo",
-      "type": "wall",
-      "y": -353,
-      "x": 272,
-      "states": ["photo_right_0"],
+      id: "item",
+      type: "table",
+      y: -27,
+      x: -156,
+      states: ["dino", "lama", "buddha", "treetrunks"],
       stateTooltips: {
-        photo_right_0: "My family."
-      },
-      "currentStateIndex": 0
+        "dino": "Roar means I love you in dinosaur.",
+        "lama": "No drama, just llama.",
+        "buddha": "Ommmm.",
+        "treetrunks": "Have you tried my apple pie?"
+      }
     },
     {
-      "id": "coffee",
-      "type": "table",
-      "intendedRelativeX": 202,
-      "y": -30,
-      "x": 202,
-      "states": ["coffee_0", "coffee_1"],
+      id: "left_photo",
+      type: "wall",
+      y: -302,
+      x: -255,
+      states: ["shiba_photo"],
       stateTooltips: {
-        coffee_0: "Hydrate or die-drate.",
-        coffee_1: "Summer mode: Activated."
-      },
-      "currentStateIndex": 0
+        shiba_photo: "My dogs."
+      }
+    },
+    {
+      id: "pencils",
+      type: "table",
+      y: 28,
+      x: -261,
+      states: ["pencils", "vase", "paper_garbage"],
+      stateTooltips: {
+        pencils: "Organized chaos. Emphasis on organized.",
+        vase: "A vase for all the flowers I don't have.",
+        paper_garbage: "The paper is not garbage, it's art."
+      }
+    },
+    {
+      id: "right_photo",
+      type: "wall",
+      y: -353,
+      x: 272,
+      states: ["family"],
+      stateTooltips: {
+        family: "My family."
+      }
+    },
+    {
+      id: "coffee",
+      type: "table",
+      y: -30,
+      x: 202,
+      states: ["coffee", "iced_coffee"],
+      stateTooltips: {
+        coffee: "Hydrate or die-drate.",
+        iced_coffee: "Summer mode: Activated."
+      }
     }
-  ].map(item => ({...item, currentStateIndex: 0})) as DeskItem[];
+  ].map(item => ({...item, currentStateIndex: 0}));
 
   items: DeskItem[] = [];
   draggingId: string | null = null;
@@ -211,7 +201,7 @@ export class AboutViewComponent {
     gsap.fromTo(el, {scale: 1}, {
       scale: 0.85, duration: 0.1, ease: 'power2.out', onComplete: () => {
         item.currentStateIndex = nextState;
-        this.showTooltip(item);
+        this.showTooltip(item, event);
         gsap.to(el, {scale: 1, duration: 0.1, ease: 'power2.out'});
       }
     });
@@ -227,12 +217,12 @@ export class AboutViewComponent {
     return item.stateTooltips?.[state ?? ''] ?? '';
   }
 
-  showTooltip(item: DeskItem) {
+  showTooltip(item: DeskItem, event: MouseEvent) {
     if (this.isTouchUser) return;
     const tooltipText = this.getTooltip(item);
     if (!tooltipText) return;
     const x = item.x;
-    const y = item.y + 20;
+    const y = item.y + 50;
     this.hoveredTooltip = {id: item.id, x, y, text: tooltipText};
     this.cdr.detectChanges();
     const el = document.getElementById('tooltip-box');
