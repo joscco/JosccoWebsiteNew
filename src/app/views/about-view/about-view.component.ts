@@ -69,6 +69,11 @@ export class AboutViewComponent implements OnInit, AfterViewInit {
 
   toggleEditMode() {
     this.isEditMode = !this.isEditMode;
+    if (this.isEditMode) {
+      this.startWiggle();
+    } else {
+      this.stopWiggle();
+    }
   }
 
   logCurrentPositions() {
@@ -117,15 +122,8 @@ export class AboutViewComponent implements OnInit, AfterViewInit {
     this.draggingId = null;
   }
 
-  getDeskItems() {
-    return this.items.filter(item => item.type === 'table');
-  }
-
-  getWallItems() {
-    return this.items.filter(item => item.type === 'wall');
-  }
-
   cycleState(event: MouseEvent, item: DeskItem) {
+    if (this.isEditMode) return;
     if (!item.states) return;
     let nextState = (item.currentStateIndex! + 1) % item.states.length;
     const el = event.target as HTMLElement;
@@ -150,9 +148,17 @@ export class AboutViewComponent implements OnInit, AfterViewInit {
 
   focus(item: DeskItem, event: MouseEvent) {
     if (this.isTouchUser) return;
+    if (this.isEditMode) return;
     this.showTooltip(item);
     this.rescaleItems();
-    this.scaleItem(item, event);
+    this.scaleItem(event);
+  }
+
+  unfocus() {
+    if (this.isTouchUser) return;
+    if (this.isEditMode) return;
+    this.hideTooltip();
+    this.rescaleItems();
   }
 
   showTooltip(item: DeskItem) {
@@ -189,11 +195,6 @@ export class AboutViewComponent implements OnInit, AfterViewInit {
     }
   }
 
-  unfocus() {
-    this.hideTooltip();
-    this.rescaleItems();
-  }
-
   private rescaleItems() {
     this.itemTweens.forEach(tween => tween.kill());
     this.itemTweens = [];
@@ -203,7 +204,7 @@ export class AboutViewComponent implements OnInit, AfterViewInit {
     });
   }
 
-  private scaleItem(item: DeskItem, event: MouseEvent) {
+  private scaleItem(event: MouseEvent) {
     const el = event.target as HTMLElement;
     // Kill and remove any existing tween for this item
     this.itemTweens = this.itemTweens.filter(tween => {
@@ -224,5 +225,29 @@ export class AboutViewComponent implements OnInit, AfterViewInit {
 
   private getTooltipOffset(item: DeskItem) {
     return item.topOffsetsTooltip[item.states?.[item.currentStateIndex ?? 0] ?? ''] || 0
+  }
+
+  private startWiggle() {
+    // Start a wiggle rotation animation for all items
+    this.itemRefs.forEach(item => {
+      const el = item.nativeElement;
+      const tween = gsap.fromTo(el, {rotation: -1}, {
+        rotation: 1,
+        duration: 0.1,
+        ease: 'power1.inOut',
+        repeat: -1,
+        yoyo: true,
+      })
+      this.itemTweens.push(tween);
+    });
+  }
+
+  private stopWiggle() {
+    this.itemTweens.forEach(tween => tween.kill());
+    this.itemTweens = [];
+    this.itemRefs.forEach(item => {
+      const el = item.nativeElement;
+      gsap.set(el, {rotation: 0}); // Reset rotation
+    });
   }
 }

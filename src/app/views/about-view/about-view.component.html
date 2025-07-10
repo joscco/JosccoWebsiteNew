@@ -20,19 +20,6 @@
          #deskWrapper
     >
       <div class="relative left-1/2 -translate-x-1/2" [style.width.px]="deskWidth">
-        <!-- Elemente Wand -->
-        @for (item of getWallItems(); track item.id; let i = $index) {
-          <img #item
-               [src]="getImageSrc(item)"
-               [style.left.px]="getScreenX(item.x!)"
-               [style.top.px]="item.y"
-               class="absolute z-10 cursor-pointer select-none -translate-x-1/2"
-               (pointerdown)="onPointerDown($event, item.id)"
-               (mouseenter)="focus(item, $event)"
-               (mouseleave)="unfocus()"
-               (click)="cycleState($event, item)"
-          />
-        }
         <!-- Tischfläche -->
         <div
           class="bottom-0 h-[200px] z-0"
@@ -55,8 +42,7 @@
             </button>
           </div>
 
-          <!-- Elemente Tisch -->
-          @for (item of getDeskItems(); track item.id; let i = $index) {
+          @for (item of items; track item.id; let i = $index) {
             <img #item
                  [src]="getImageSrc(item)"
                  [style.left.px]="getScreenX(item.x!)"
@@ -76,10 +62,11 @@
           [style.left.px]="getScreenX(hoveredTooltip.x)"
           [style.top.px]="hoveredTooltip.y"
         >
-          {{hoveredTooltip.text}}
-          <span
-            class="absolute left-1/2 -translate-x-1/2 -bottom-2 w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent border-t-8 border-t-black"
-          ></span>
+          {{ hoveredTooltip.text }}
+          <svg class="absolute left-1/2 -translate-x-1/2 -bottom-2" width="20" height="10" viewBox="0 0 20 10">
+            <polygon points="0,0 10,10 20,0" fill="black"/>
+          </svg>
+        </div>
       </div>
     </div>
   </div>
