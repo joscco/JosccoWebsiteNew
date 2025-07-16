@@ -15,7 +15,8 @@ export class MainViewComponent {
     originalHeight: number,
     title: string,
     link?: string,
-    subtitle?: string
+    subtitle?: string,
+    isPost?: boolean
   }[] = [
     {
       img: "images/projects/2025_04_grannies_gotcha.png",
@@ -109,6 +110,7 @@ export class MainViewComponent {
       originalHeight: 1142,
       title: "Ramen God Illustration",
       subtitle: "January 2020",
+      link: "posts/ramen-god",
     },
     {
       img: "images/projects/2018_08_bachelor_thesis.png",

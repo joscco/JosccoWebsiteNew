@@ -1,7 +1,18 @@
-import {AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild, HostListener} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  HostListener,
+  inject
+} from '@angular/core';
 import {AsyncPipe, NgClass, NgFor, NgIf, NgStyle} from '@angular/common';
 import {ReplaySubject} from 'rxjs';
 import {resizeImage} from '../app.animations';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-projects-masonry',
@@ -31,6 +42,8 @@ export class ProjectsMasonryComponent implements AfterViewInit, OnInit, OnDestro
     subtitle?: string
   }[];
   @Input() colLimits?: [minPixels: number, rows: number][];
+
+  router = inject(Router);
 
   columnGap = 16;
   height = 0;
@@ -107,7 +120,7 @@ export class ProjectsMasonryComponent implements AfterViewInit, OnInit, OnDestro
     // So the link must be clicked twice to navigate
     if (this.clickedItem === item.img || this.hoveredItem === item.img) {
       if (item.link) {
-        window.location.href = item.link;
+          window.location.href = item.link;
       }
     } else {
       this.clickedItem = item.img;
