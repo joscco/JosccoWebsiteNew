@@ -1,13 +1,15 @@
 import {Component} from '@angular/core';
 import {ChildrenOutletContexts, RouterOutlet} from '@angular/router';
 import {NavBarComponent} from './nav-bar/nav-bar.component';
+import {AppFooterComponent} from './app-footer/app-footer.component';
 import {fadeInAndOutAnimations} from './app.animations';
 
 @Component({
   selector: 'app-root',
   imports: [
     RouterOutlet,
-    NavBarComponent
+    NavBarComponent,
+    AppFooterComponent
   ],
   templateUrl: './app.component.html',
   animations: [
