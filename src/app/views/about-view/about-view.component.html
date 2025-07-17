@@ -30,10 +30,10 @@
                class="absolute left-1/2 -translate-x-1/2 min-w-[850px] pointer-events-none"
                alt="divider">
           <!-- Buttons -->
-          <div *ngIf="!isTouchUser" class="absolute right-28 bottom-[200px] flex flex-col w-16 gap-2 z-50 text-sm">
-              <img (click)="toggleEditMode()" [src]="isEditMode ? 'svg/about/lock.svg' : 'svg/about/move.svg'"
-                   class="inline-block w-16 h-16 hover:scale-110 transition-all duration-200"
-                   alt="Edit Icon">
+          <div *ngIf="!isTouchUser && !isCompact" class="absolute right-28 bottom-[200px] flex flex-col w-16 gap-2 z-50 text-sm">
+              <img (mouseenter)="onEditOver($event.target)" (mouseleave)="onEditOut($event.target)" (click)="toggleEditMode($event.target)" [src]="isEditMode ? 'svg/about/lock.svg' : 'svg/about/move.svg'"
+                   class="inline-block w-16 h-16"
+                   alt="Edit Icon" #editButton>
           </div>
 
           @for (item of items; track item.id; let i = $index) {

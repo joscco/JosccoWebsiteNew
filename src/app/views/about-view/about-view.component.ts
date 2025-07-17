@@ -37,6 +37,8 @@ export class AboutViewComponent implements OnInit, AfterViewInit {
   @ViewChild('desk', {static: true}) desk!: ElementRef;
   @ViewChildren('item') itemRefs!: QueryList<ElementRef>;
 
+  editButton?: HTMLElement;
+
   maxDeskWidth = 1000;
   deskWidth = 0;
   isEditMode = false;
@@ -45,6 +47,7 @@ export class AboutViewComponent implements OnInit, AfterViewInit {
   hoveredTooltip: { id: string, x: number, y: number, text: string } | null = null;
   tooltipTween?: gsap.core.Tween
   itemTweens: gsap.core.Tween[] = [];
+  editButtonTween?: gsap.core.Tween;
 
   defaultItems: DeskItem[] = AboutItems.map(item => ({...item, currentStateIndex: 0}));
 
@@ -52,8 +55,9 @@ export class AboutViewComponent implements OnInit, AfterViewInit {
   draggingId: string | null = null;
   dragOffset = {x: 0, y: 0};
 
-  constructor(private cdr: ChangeDetectorRef) {
-  }
+  private resizeListener = () => this.resizeTableAndRepositionItems();
+
+  constructor(private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.isTouchUser = 'ontouchstart' in window;
@@ -63,17 +67,21 @@ export class AboutViewComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.resizeTableAndRepositionItems();
-    window.addEventListener('resize', () => this.resizeTableAndRepositionItems());
+    window.addEventListener('resize', () => this.resizeListener);
     this.cdr.detectChanges();
   }
 
-  toggleEditMode() {
-    this.isEditMode = !this.isEditMode;
-    if (this.isEditMode) {
-      this.startWiggle();
-    } else {
-      this.stopWiggle();
-    }
+  ngOnDestroy() {
+    window.removeEventListener('resize', this.resizeListener);
+    this.itemTweens.forEach(tween => tween.kill());
+    this.tooltipTween?.kill();
+    this.editButtonTween?.kill();
+  }
+
+  toggleEditMode(target: EventTarget | null, newMode: boolean = !this.isEditMode) {
+    if (this.isEditMode === newMode) return;
+    this.swapEditButton(target as HTMLElement, newMode);
+    newMode ? this.startWiggle() : this.stopWiggle();
   }
 
   getScreenX(relX: number): number {
@@ -87,7 +95,12 @@ export class AboutViewComponent implements OnInit, AfterViewInit {
   resizeTableAndRepositionItems() {
     this.deskWidth = Math.min(this.deskWrapper.nativeElement.offsetWidth, this.maxDeskWidth);
     this.isCompact = window.innerWidth < 768;
-    this.items = this.isCompact ? this.defaultItems.filter(item => item.showOnSmallScreen) : [...this.defaultItems];
+    if (this.isCompact && this.editButton) {
+      this.toggleEditMode(this.editButton, false)
+    }
+    this.items = this.isCompact
+      ? this.defaultItems.filter(item => item.showOnSmallScreen)
+      : [...this.defaultItems];
     this.cdr.detectChanges();
   }
 
@@ -105,11 +118,8 @@ export class AboutViewComponent implements OnInit, AfterViewInit {
     if (!this.draggingId || !this.isEditMode || this.isTouchUser) return;
     const item = this.items.find(i => i.id === this.draggingId);
     if (!item) return;
-    const newScreenX = event.clientX - this.dragOffset.x;
-    const newRelX = this.getRelativeX(newScreenX);
-    const newY = event.clientY - this.dragOffset.y;
-    item.x = Math.round(newRelX)
-    item.y = Math.round(newY);
+    item.x = Math.round(this.getRelativeX(event.clientX - this.dragOffset.x));
+    item.y = Math.round(event.clientY - this.dragOffset.y);
     event.preventDefault();
   }
 
@@ -118,15 +128,14 @@ export class AboutViewComponent implements OnInit, AfterViewInit {
   }
 
   cycleState(event: MouseEvent, item: DeskItem) {
-    if (this.isEditMode) return;
-    if (!item.states) return;
-    let nextState = (item.currentStateIndex! + 1) % item.states.length;
+    if (this.isEditMode || !item.states) return;
+    const nextState = ((item.currentStateIndex ?? 0) + 1) % item.states.length;
     const el = event.target as HTMLElement;
-    gsap.fromTo(el, {scale: 1}, {
+    gsap.fromTo(el, { scale: 1 }, {
       scale: 0.85, duration: 0.1, ease: 'power2.out', onComplete: () => {
         item.currentStateIndex = nextState;
         this.focus(item, event);
-        gsap.to(el, {scale: 1, duration: 0.1, ease: 'power2.out'});
+        gsap.to(el, { scale: 1, duration: 0.1, ease: 'power2.out' });
       }
     });
   }
@@ -186,14 +195,13 @@ export class AboutViewComponent implements OnInit, AfterViewInit {
 
   hideTooltip() {
     const el = document.getElementById('tooltip-box');
+    this.tooltipTween?.kill();
     if (el) {
-      this.tooltipTween?.kill();
       this.tooltipTween = gsap.to(el, {
         opacity: 0, scale: 0.9, duration: 0.2, ease: 'power2.in'
       });
-    } else {
-      this.hoveredTooltip = null;
     }
+    this.hoveredTooltip = null;
   }
 
   private rescaleItems() {
@@ -249,6 +257,37 @@ export class AboutViewComponent implements OnInit, AfterViewInit {
     this.itemRefs.forEach(item => {
       const el = item.nativeElement;
       gsap.set(el, {rotation: 0}); // Reset rotation
+    });
+  }
+
+  onEditOver(target: EventTarget | null) {
+    this.editButton = target as HTMLElement;
+    this.editButtonTween?.kill();
+    this.editButtonTween = gsap.to(target, {
+      scale: 1.1,
+      duration: 0.2,
+      ease: 'power2.out'
+    });
+  }
+
+  onEditOut(target: EventTarget | null) {
+    this.editButtonTween?.kill();
+    this.editButtonTween = gsap.to(target, {
+      scale: 1,
+      duration: 0.2,
+      ease: 'power2.out'
+    });
+  }
+
+  private swapEditButton(target: HTMLElement, newMode: boolean) {
+    this.editButtonTween?.kill();
+    let previousScale = gsap.getProperty(target, 'scale');
+    this.editButtonTween = gsap.to(target, {
+      scale: 0.85, duration: 0.1, ease: 'power2.out', onComplete: () => {
+        this.isEditMode = newMode;
+        this.cdr.detectChanges()
+        gsap.to(target, {scale: previousScale, duration: 0.1, ease: 'power2.out'});
+      }
     });
   }
 }
