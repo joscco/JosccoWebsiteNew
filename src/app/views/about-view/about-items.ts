@@ -26,7 +26,7 @@ export const AboutItems: DeskItem[] = [
     "type": "table",
     "y": -64,
     "x": -254,
-    "showOnSmallScreen": true,
+    "showOnSmallScreen": false,
     "topOffsetsTooltip": {
       "dino": -20,
       "lama": -20,
@@ -69,7 +69,7 @@ export const AboutItems: DeskItem[] = [
     "type": "table",
     "y": -100,
     "x": -140,
-    "showOnSmallScreen": false,
+    "showOnSmallScreen": true,
     "topOffsetsTooltip": {
       "pencils": -20,
       "vase": 10,
